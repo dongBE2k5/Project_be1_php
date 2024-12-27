@@ -27,11 +27,12 @@ if(!empty($_POST['voucher'])) {
 $user = $userModel->findUserById($userID);
 if (!empty($_POST['payment_method'])) {
     $totalOrder = (int)$_POST['totalOrder'];
-    $order = $orderModel->saveOrder($_POST['payment_method'], 0, $totalOrder , $user['id']);
+    $order = $orderModel->saveOrder($_POST['payment_method'], 1, $totalOrder , $user['id']);
     if ($order != null) {
         $carts =  json_decode($_POST['miniCartData'], true);
         foreach ($carts as $cart) {
-            $orderDetailModel->saveOrderDetail($order['id'], $cart['price'], $cart['id'], $cart['quantity']);
+            $attribute = $cart['size'] . '-' . implode(',', $cart['crust']);
+            $orderDetailModel->saveOrderDetail($order['id'], $cart['price'], $cart['id'], $cart['quantity'], $attribute);
         }
         header("location: http://doanbe1.local/orderSuccess.php");
     }

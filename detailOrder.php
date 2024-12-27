@@ -7,14 +7,27 @@ spl_autoload_register(function ($className) {
 $userModel = new User();
 $orderModel = new Order();
 $orderDetailModel = new OrderDetail();
+if(!empty($_POST['orderId'])) {
+    $orderModel->deleteOrder($_POST['orderId']);
+    header("location: http://doanbe1.local/");
+}
+
 if (isset($_SESSION['userId'])) {
 
     $userID = $_SESSION['userId'];
 
     $user = $userModel->findUserById($userID);
     $order = $orderModel->findByUserID($userID);
-    $orderDetail = $orderDetailModel->findByOrderId($order['id']);
+
+    if($order) {
+
+    $orderDetail = $orderDetailModel->findByOrderId($order[0]['id']);
+    }else {
+        header("location: http://doanbe1.local/");
+    }
+
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -44,7 +57,7 @@ if (isset($_SESSION['userId'])) {
                         </strong>
                     </div>
                     <div class="flex-1 text-right text-slate-500">
-                        Ngày đặt hàng: 05/10/2023 3:48:11 CN
+                        Ngày đặt hàng: <?php echo ($order[0]['created_at'])  ?>
                     </div>
                 </div>
             </div>
@@ -100,7 +113,7 @@ if (isset($_SESSION['userId'])) {
                         </div>
                         <div class="py-2">
                             Thanh toán khi nhận hàng
-                                <br><a href="#" class="text-green-400"><?php echo ($order['status'] == 0 ) ? "Chờ xử lí" : (($order['status'] == 1) ? "Đang vận chuyển" : "Đã giao" )?></a>
+                            <br><a href="#" class="text-green-400"><?php echo ($order[0]['status'] == 1) ? "Chờ xử lí" : (($order[0]['status'] == 2) ? "Đang vận chuyển" : "Đã giao") ?></a>
 
                         </div>
                     </div>
@@ -109,57 +122,51 @@ if (isset($_SESSION['userId'])) {
         </div>
         <div class="py-8 text-xs">
             <div class="border-2 shadow-lg rounded-xl">
-                <div class="flex p-4 rounded-t-lg  bg-zinc-300">
-                    <div class=" w-8/12">
-                        <strong>
-                            Sản phẩm
-                        </strong>
+                <div class="flex p-4 rounded-t-lg bg-zinc-300">
+                    <div class="w-8/12">
+                        <strong>Sản phẩm</strong>
                     </div>
-                    <div class="md:w-1/12 w-20 text-right	">
-                        <strong>
-                            Giá
-                        </strong>
+                    <div class="md:w-1/12 w-20 text-center">
+                        <strong>Giá</strong>
                     </div>
-                    <div class=" md:w-1/12 w-20 text-center	">
-                        <strong>
-                            Số lượng
-                        </strong>
+                    <div class="md:w-1/12 w-20 text-center">
+                        <strong>Số lượng</strong>
                     </div>
-                    <div class=" md:w-1/6  w-20 text-right	">
-                        <strong>
-                            Tạm tính
-                        </strong>
+                    <div class="md:w-1/6 w-20 text-center">
+                        <strong>Tạm tính</strong>
                     </div>
                 </div>
+
                 <?php foreach ($orderDetail as $item) : ?>
                     <div class="flex p-4">
                         <div class="w-8/12 md:flex container">
-                            <div class=" mr-4 text-center">
-                                <img class="size-20" src="<?php echo $item['image'] ?>" alt="">
+                            <div class="mr-4 text-center">
+                                <img class="size-20" src="<?php echo $item['image']; ?>" alt="">
                             </div>
-                            <div class=" md:w-5/12">
-                                <strong class=""><?php echo $item['name'] ?></strong>
-                                <br>Kích thước - Nhỏ 6"
-                                <br>Đế - Dày
+                            <div class="md:w-5/12">
+                                <strong><?php echo $item['name']; ?></strong>
+                                <?php $size = explode("-", $item['attribute']); ?>
+                                <br>Kích thước - <?php echo $size[0]; ?>
+                                <br>Đế - <?php echo $size[1]; ?>
                             </div>
                         </div>
 
-                        <div class=" md:w-1/12 w-20  text-center	">
-                            <?php echo $item['price'] ?>đ
+                        <div class="md:w-1/12 w-20 text-center">
+                            <?php echo $item['price']; ?>đ
                         </div>
-                        <div class=" md:w-1/12 w-20 text-center	">
-                            x<?php echo $item['quantity'] ?>
+                        <div class="md:w-1/12 w-20 text-center">
+                            x<?php echo $item['quantity']; ?>
                         </div>
-                        <div class=" md:w-1/6  w-20 text-center	">
-                            <strong><?php echo ($item['quantity'] * $item['price']) ?></strong>
+                        <div class="md:w-1/6 w-20 text-center">
+                            <strong><?php echo $item['quantity'] * $item['price']; ?></strong>
                         </div>
                     </div>
-                <?php endforeach ?>
+                <?php endforeach; ?>
             </div>
         </div>
         <div class="py-8">
-            <div class="md:flex container">
-                <div class="flex pb-4">
+            <div class="md:flex items-center container">
+                <div class="flex ">
                     <div class="w-2/10 pr-4">
                         <button type="submit" class="bg-slate-800 text-white rounded-lg">
                             <div class="flex p-2">
@@ -190,30 +197,31 @@ if (isset($_SESSION['userId'])) {
                     </div>
                 </div>
                 <div class="md:w-1/2 w-full pr-4 border-2">
-                    <div class="p-4 ">
-                        <div class="flex">
-                            <div class="w-1/2">Tạm tính (x1)</div>
-                            <div class="w-1/2 text-right	"><strong>199.000đ</strong></div>
-
-                        </div>
-                        <div class="flex">
-                            <div class="w-1/2">Giảm giá</div>
-                            <div class="w-1/2 text-right	"><strong>0đ</strong></div>
-
-                        </div>
-                        <div class="flex border-b-4 ">
-                            <div class="w-1/2">Phí giao hàng </div>
-                            <div class="w-1/2 pb-4 text-right	"><strong>0đ</strong></div>
-
-                        </div>
-                    </div>
                     <div class="p-4">
                         <div class="flex">
                             <div class="w-1/2"><strong>Tổng tiền</strong></div>
-                            <div class="w-1/2 text-right text-red-600"><strong>119.000đ</strong></div>
+                            <div class="w-1/2 text-right text-red-600"><strong><?php echo $order[0]['totalAmount'] ?> đ</strong></div>
                         </div>
                     </div>
                 </div>
+                <div class="flex items-center">
+                    <div class="w-2/10 pl-4">
+                        <form class="m-0" action="detailOrder.php" method="POST">
+                            <input type="hidden" name="orderId" value="<?php echo $order[0]['id'] ?>">
+                            <button type="submit" class="bg-red-600 text-white rounded-lg">
+                                <div class="flex p-2">
+                                    <div class="p-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                        </svg>
+                                    </div>
+                                    Hủy đơn hàng
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

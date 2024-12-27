@@ -76,7 +76,7 @@ $userModel = new User();
 
                             <div class="hidden  group-hover:block bg-gray-300 p-2 absolute w-40 top-[25px] rounded-md">
                                 <p class="text-black"><a href="inforCustomer.php"> Thông Tin Cá  Nhân</a></p>
-                                <p class="text-black"><a href="detailOrder.php"> Đơn hàng của bạn</p>
+                                <p class="text-black"><a href="orderHistory.php"> Đơn hàng của bạn</p>
                             </div>
                         
                         </div>

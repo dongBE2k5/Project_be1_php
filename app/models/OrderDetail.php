@@ -12,13 +12,15 @@ class OrderDetail extends  Database
        return parent::select($sql);
     }
 
-    function saveOrderDetail($orderId, $price, $productId, $quantity) {
-        $sql = parent::$connection->prepare('INSERT INTO `orderdetail`(`orderId`, `price`,`productId`, `quantity`) VALUES (?, ?, ?, ?)');
+    function saveOrderDetail($orderId, $price, $productId, $quantity, $attribute) {
+        $sql = parent::$connection->prepare('INSERT INTO `orderdetail`(`orderId`, `price`,`productId`, `quantity`, `attribute`) VALUES (?, ?, ?, ?, ?)');
         
-        $sql->bind_param('iiii', $orderId, $price, $productId, $quantity);
+        $sql->bind_param('iiiis', $orderId, $price, $productId, $quantity, $attribute);
 
         // 3 & 4
         return $sql->execute();
     }
+
+   
     
 }
