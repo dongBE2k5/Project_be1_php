@@ -9,6 +9,8 @@ $products=$productModel->all();
 
 $categoriesModel= new Category();
 $categories= $categoriesModel->all();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -64,9 +66,23 @@ $categories= $categoriesModel->all();
                                 d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                         </svg></div>
                     <div class="login-and-register">
-                        <a href="login.php" class="register">Đăng nhập</a>
-                        <span>/</span>
-                        <a href="register.php" class="login">Tạo tài khoản</a>
+                    <?php
+                    if (isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] === true) :
+                    ?>
+                        
+                           <p>Xin chào <?php echo $_SESSION['username'] ?> <a href="logout.php">Logout</a></p> 
+ 
+                     
+                    <?php
+                    else :
+                    ?>
+                         <a href="user.php" class="login">Đăng nhập</a>
+                    <?php
+                    endif;
+                    ?>
+                        <!-- <a href="user.php" class="login">Đăng nhập</a> -->
+                        <!-- <span>/</span>
+                        <a href="register.php" class="login">Tạo tài khoản</a> -->
                     </div>
                 </div>
             </div>
@@ -102,9 +118,6 @@ $categories= $categoriesModel->all();
                 <hr class="mb-4">
                 <div class="list_item">
                     <ul class="minicart">
-
-
-
 
                     </ul>
                     <div>

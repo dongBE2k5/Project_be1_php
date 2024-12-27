@@ -11,15 +11,25 @@ $id = $_GET['id'];
 $productModel = new Product();
 $product = $productModel->find($id);
 
-if (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['description']) && !empty($_POST['image']) && !empty($_POST['category-id'])) {
+if  (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['description']) && !empty($_POST['quantity']) && !empty($_POST['category-id'])) {
+   if (!empty($_FILES['image'])) {
+    $image= '../../public/images/' .  time() . '.' . pathinfo($_FILES['image']['name'])['extension'];
+    is_uploaded_file($_FILES['image']['tmp_name']) && move_uploaded_file($_FILES['image']['tmp_name'],$image);
+   }else{
+    $image =$product['image'];
+   } 
+    $productModel = new Product();
     $name = $_POST['name'];
     $price = $_POST['price'];
     $description = $_POST['description'];
-    $image = $_POST['image'];
     $categoryId = $_POST['category-id'];
-    if ($productModel->update($name, $price, $description, $image, $id, $categoryId))
-        header("Location: http://localhost/be1_mysql/admin/products");
+    $quantity=$_POST['quantity'];
+    if ($productModel->update($name, $price, $description, $image,  $quantity, $categoryId,$id)) {
+        header("Location: http://localhost/Project_be1_php/admin/products");
+
 }
+}
+  
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +46,7 @@ if (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['descript
 <body>
     <div class="container">
         <h1>Edit Product</h1>
-        <form action="edit.php?id=<?php echo $product['id'] ?>" method="post">
+        <form action="edit.php?id=<?php echo $product['id'] ?>" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="name" name="name" value="<?php echo $product['name'] ?>">
@@ -51,19 +61,23 @@ if (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['descript
                 
             </div>
             <div class="mb-3">
-                <label for="image" class="form-label">Image</label>
-                <input type="text" class="form-control" id="image" name="image" value="<?php echo $product['image'] ?>">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="text" class="form-control" id="quantity" name="quantity" value="<?php echo $product['quantity'] ?>">
+            </div>
+            <div class="mb-3">
+            <img src="<?php echo $product['image'] ?>" alt="" class="w-50">
+                <input type="file" class="form-control" id="image" name="image">
             </div>
 
             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                 <?php
                 foreach ($categories as $category) :
-                    $checked = (!empty($product['category_ids']) && in_array($category['id'], explode(',', $product['category_ids']))) ? 'checked' : '';
+
+                    $checked = (!empty($product['category_id']) && in_array($category['id'], explode(',', $product['category_id']))) ? 'checked' : '';
                 ?>
-                <input type="checkbox" class="btn-check" id="category-<?php echo $category['id'] ?>" autocomplete="off" value="<?php echo $category['id'] ?>" name="category-id[]" <?php echo $checked ?>>
-                
-                
-                <label class="btn btn-outline-primary" for="category-<?php echo $category['id'] ?>"><?php echo $category['name'] ?></label>
+               <input type="radio" class="btn-check" <?php echo $checked ?> id="category-<?php echo $category['id'] ?>" autocomplete="off" value="<?php echo $category['id'] ?>" name="category-id">
+                <label class="btn btn-outline-success" for="category-<?php echo $category['id'] ?>"><?php echo $category['name'] ?></label>
+
                 <?php
                 endforeach;
                 ?>
