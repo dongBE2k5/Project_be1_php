@@ -10,9 +10,9 @@ spl_autoload_register(function ($className) {
 });
 
 $productModel = new Product();
-// if (isset($_POST['product-id'])) {
-//     $productModel->bin($_POST['product-id']);
-// }
+if (isset($_POST['product-id'])) {
+    $productModel->bin($_POST['product-id']);
+}
 
 $products = $productModel->all();
 ?>
@@ -61,12 +61,14 @@ $products = $productModel->all();
                     <td><?php echo $product['price'] ?></td>
                     <td>
                     <?php
-                        echo (!empty($product['category_name'])) ? implode(array_map(function ($e) {
-                            return "<span class='badge text-bg-warning'>$e</span>";
-                        }, explode(',', $product['category_name']))) : '';
+                        // echo (!empty($product['category_name'])) ? implode(array_map(function ($e) {
+                        //     return "<span class='badge text-bg-warning'>$e</span>";
+                        // }, explode(',', $product['category_name']))) : '';
+                        echo $product['categoriesName'];
+                        
                     ?>
                     </td>
-                    <td><img src="../../public/images/<?php echo $product['image'] ?>" width="50"></td>
+                    <td><img src="<?php echo $product['image']?>" width="50"></td>
                     <td>
                         <a href="edit.php?id=<?php echo $product['id'] ?>" class="btn btn-outline-primary">Edit</a>
                         <form action="index.php" method="post" onsubmit="return confirm('Xóa không?')">
