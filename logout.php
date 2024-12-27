@@ -1,5 +1,4 @@
-<?php 
+<?php
 session_start();
 session_destroy();
-header("location: http://doanbe1.local")
-?>
+header('Location: http://localhost/Project_be1_php/home.php');

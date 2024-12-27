@@ -132,3 +132,7 @@ class Product extends  Database
         return $sql->execute();
     }
 }
+
+
+
+  

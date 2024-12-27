@@ -8,7 +8,7 @@ spl_autoload_register(function ($className) {
 $categoryModel = new Category();
 $categories = $categoryModel->all();
 
-if (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['description']) && !empty($_POST['image']) && !empty($_POST['quantity']) && !empty($_POST['category-id'])) {
+if (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['description']) && !empty($_FILES['image']) && !empty($_POST['quantity']) && !empty($_POST['category-id'])) {
     $productModel = new Product();
     $name = $_POST['name'];
     $price = $_POST['price'];
@@ -16,10 +16,13 @@ if (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['descript
     $image = $_POST['image'];
     $categoryId = $_POST['category-id'];
     $quantity=$_POST['quantity'];
+    $image = '../../public/images/' .  time() . '.' . pathinfo($_FILES['image']['name'])['extension'];
+    if(is_uploaded_file($_FILES['image']['tmp_name']) && move_uploaded_file($_FILES['image']['tmp_name'], $   $image)) {
     if ($productModel->add($name, $price, $description, $image,  $quantity, $categoryId)) {
         $_SESSION['notification'] = "Them thanh cong";
         header("Location: http://localhost/Project_be1_php/admin/products");
     }
+}
 
 }
 ?>
@@ -38,7 +41,7 @@ if (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['descript
 <body>
     <div class="container">
         <h1>Add Product</h1>
-        <form action="add.php" method="post">
+        <form action="add.php" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="name" name="name">
@@ -56,8 +59,7 @@ if (!empty($_POST['name']) && !empty($_POST['price']) && !empty($_POST['descript
                 <input type="text" class="form-control" id="quantity" name="quantity">
             </div>
             <div class="mb-3">
-                <label for="image" class="form-label">Image</label>
-                <input type="text" class="form-control" id="image" name="image">
+                <input type="file" class="form-control" id="image" name="image">
             </div>
 
             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
