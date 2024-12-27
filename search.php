@@ -10,10 +10,26 @@ if (isset($_GET['q'])) {
     $q = $_GET['q'];
 }
 
-$productModel = new Product();
-$products = $productModel->findByKeyWord($q);
+
 $categoriesModel= new Category();
 $categories= $categoriesModel->all();
+$pagecurrent = 0;
+if(isset($_GET['page'])){
+
+    $pagecurrent =  ($_GET['page'] - 1) * 3;
+
+}
+
+
+
+
+$productModel = new Product();
+$count = $productModel->countByKeyWord($q);
+
+$page = intval($count[0]['countPn'] % 3); 
+$products = $productModel->findByKeyWord($q , 3 , $pagecurrent);
+
+
 
 
 ?>
@@ -146,88 +162,12 @@ $categories= $categoriesModel->all();
     <!-- Slide -->
 <!-- navbar -->
     <section class="text-gray-600 body-font">
-        <div class="container pb-24 mx-auto">
-
-            <dialog id="firstModal" class="p-10 border-2 border-gray-300 rounded-xl w-11/12 h-4/5 mx-auto relative">
-                <div
-                    class="close absolute top-0 right-0 w-7 h-7 rounded-full flex justify-center align-center bg-red-500">
-                    <button onclick="firstModal.close()"> X</button>
-                </div>
-                <div class="grid grid-cols-2 gap-6">
-                 
-                    <div class=" w-full h-full rounded-md">
-
-                        <img id="modal-product-Image" class="w-10/12" src="" alt="">
-                        <input type="hidden" value="190" id="modal-product-image-hidden">
-                        <div>
-                            <!-- <p class="text-2xl font-bold pr-20 text-center" id="total-price">190.000đ</p> -->
-                            <p class="text-2xl font-bold pr-20 text-center pt-20 " id="modal-product-price">1900</p>
-                            <input type="hidden" value="190" id="modal-product-price-hidden">
-                            <!-- <input id="price_hidden" type="hidden" value="1900" > -->
-                        </div>
-                        <p id="price" class="text-xl font-bold pr-20 text-center"> </p>
-                    </div>
-
-                    <div class="flex flex-col gap-4">
-                        <p id="modal-product-name" class="text-xl font-bold pr-20 ">Tên Sản Phẩm</p>
-                        <p class="hidden" id="modal-product-id"></p>
-                        <input type="hidden" value="Tên Sản Phẩm" id="modal-product-name-hidden">
-                        <input type="hidden" value="Tên Sản Phẩm" id="modal-product-id-hidden">
-                        <p class="text-[#007d43]">Kích thước nhỏ 6``</p>
-                        <p class="leading-relaxed text-base mb-3">Tôm, Đào hoà quyện bùng nổ cùng sốt Thousand Island
-                        </p>
-                        <h1 class="title-font text-lg font-bold text-[#007d43] mb-3">Kích Thước </h1>
-                        <div class="size">
-                            <label class="pr-3">
-                                <input type="radio" class="size" name="size" value="small" data-price="0"> Size nhỏ
-                                (+$0)
-                            </label>
-                            <label class="pr-3">
-                                <input type="radio" class="size" name="size" value="medium" data-price="100000"> Size
-                                trung bình (+$2)
-                            </label>
-                            <label class="pr-3">
-                                <input type="radio" class="size" name="size" value="large" data-price="200000"> Size lớn
-                                (+$4)
-                            </label>
-                        </div>
-                        <h1 class="title-font text-lg font-bold text-[#007d43] mb-3">Đế</h1>
-                        <div class="toppng">
-                            <label class="pr-2">
-                                <input type="checkbox" class="topping mr-2" value="Dày" data-topping="100">Dày
-                            </label>
-                            <label class="pr-2">
-                                <input type="checkbox" class="topping" value="Mỏng Giòn" data-topping="105"> Mỏng giòn
-                            </label>
-                            <label class="pr-2">
-                                <input type="checkbox" class="topping" value="Viền Phô Mai" data-topping="110"> Viền phô
-                                mai
-                            </label>
-                            <label class="pr-2">
-                                <input type="checkbox" class="topping" value="Viền Phô Mai Xúc Xích" data-topping="115">
-                                Viền phô mai xúc xích
-                            </label>
-                        </div>
-
-                        <div class="comment">
-                            <h1 class="title-font text-lg font-bold text-[#007d43] mb-3">Ghi Chú</h1>
-                            <textarea class="border-2 border-gray-200" name="ghichu" id="" cols="55" rows="5">
-                  </textarea>
-                        </div>
-
-                        <!-- <button onclick="addItemToCart('Pizza Hải Sản', 190.000)"  class="bg-[#007d43] hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 w-full border border-gray-400 rounded-xl shadow"> -->
-
-                        <button onclick="addToMiniCart()"
-                            class="text-center text-white add-to-cart-btn bg-[#007d43] font-semibold py-2 px-4 w-full border border-gray-400 rounded-xl shadow">
-                            THÊM VÀO GIỎ HÀNG</button>
-                    </div>
-                    <div>
-                    </div>
-            </dialog>
+        <div class="container pb-24 mx-auto flex">
 
 
-            <!-- show product -->
-            <section class="text-gray-600 body-font">
+
+           
+            <section class="text-gray-600 body-font w-full ">
                 <div class="container pb-24  mx-auto">
             
                     <div class="mb-6">
@@ -278,15 +218,40 @@ $categories= $categoriesModel->all();
                             ?>
 
                         </div>
+                       
 
 
                     </div>
                           
                 </div>
             </section>
+         
         </div>
     </section>
+    <div class="flex justify-end">
+    <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm flex justify-end p-2 text-end" aria-label="Pagination">
+                        <a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                        <span class="sr-only">Previous</span>
+                        <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                            <path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                        </svg>
+                        </a>
+                        <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
+                         <?php for($i = 1 ; $i <= $page ; $i++):?>
 
+                        <a href="?q=<?php echo $q  ?>&page=<?php echo $i ?>" aria-current="page" class="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"><?php echo $i ?></a>
+                        <?php endfor?>
+                
+                        <a href="#" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                        <span class="sr-only">Next</span>
+                        <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                            <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                        </svg>
+                        </a>
+                    </nav>
+
+    </div>
+    
 </body>
 
 <!-- footer -->
