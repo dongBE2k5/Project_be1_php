@@ -20,15 +20,26 @@ class Product extends  Database
         $sql->bind_param("i",$id);
        return parent::select($sql);
     }
-    public function findByKeyWord($keyword)
+    public function findByKeyWord($keyword , $limit, $offset)
     {
         // 2. Tạo câu query
-        $sql = parent::$connection->prepare("SELECT * FROM `products` WHERE `name` LIKE ?");
+        $sql = parent::$connection->prepare("SELECT * FROM `products` WHERE `name` LIKE ? limit ? offset ?");
+        $keyword = "%{$keyword}%";
+        $sql->bind_param('sii', $keyword , $limit , $offset);
+        // 3 & 4
+        return parent::select($sql);
+    }
+
+    public function countByKeyWord($keyword)
+    {
+        // 2. Tạo câu query
+        $sql = parent::$connection->prepare("SELECT count(*) as countPn FROM `products` WHERE `name` LIKE ? ");
         $keyword = "%{$keyword}%";
         $sql->bind_param('s', $keyword);
         // 3 & 4
         return parent::select($sql);
     }
+
     public function add($name, $price, $description, $image,$quantity, $category_id)
     {
         // 2. Tạo câu query
@@ -121,3 +132,7 @@ class Product extends  Database
         return $sql->execute();
     }
 }
+
+
+
+  
