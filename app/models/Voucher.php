@@ -1,5 +1,5 @@
 <?php
-class Voucher extends  Database
+class Voucher extends Database
 {
     function all() {
         $sql=parent::$connection->prepare('SELECT * FROM `categories`');
@@ -7,12 +7,12 @@ class Voucher extends  Database
     }
 
     function findByName($maVoucher) {
-        $sql=parent::$connection->prepare('SELECT * FROM `vouchers` WHERE `maVoucher` = ?' );
+        $sql=parent::$connection->prepare('SELECT * FROM `vouchers` WHERE `name` = ?' );
         $sql -> bind_param("s",$maVoucher);
        return parent::select($sql);
     }
     
-}
+
 
 
     function add($name,$start_date, $end_date, $percent) {
@@ -20,4 +20,5 @@ class Voucher extends  Database
         $sql->bind_param("sssi",$name,$start_date,$end_date,$percent);
         return $sql->execute();
     }
+}
 
