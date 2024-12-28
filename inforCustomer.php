@@ -112,9 +112,8 @@ if(isset($_SESSION['userId'])){
                                 <ul>
                                     <li class="border-b py-3 items-menu active text-[#00b041]"><a href="#">Thông
                                             tin khách hàng</a></li>
-                                    <li class="border-b py-3 items-menu hover:text-[#00b041]"><a href="/customerAddress">Sổ địa chỉ</a>
-                                    </li>
-                                    <li class="border-b py-3 items-menu hover:text-[#00b041]"><a href="/orderHistory">Lịch sử mua
+                                    
+                                    <li class="border-b py-3 items-menu hover:text-[#00b041]"><a href="/orderHistory.php">Lịch sử mua
                                             hàng</a></li>
                                     <li class="border-b py-3 items-menu hover:text-[#00b041]"><a href="changePassword.php">Đổi mật
                                             khẩu</a></li>
