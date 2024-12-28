@@ -1,3 +1,24 @@
+
+<?php
+  session_start();
+  require_once 'config/database.php';
+  spl_autoload_register(function ($className) {
+      require_once "app/models/$className.php";
+  });
+  $userModel = new User();
+  if(!empty($_POST['username']) && !empty($_POST['password']) ) {
+    $user = $userModel->login($_POST['username'], $_POST['password']);
+      if($user) {
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['userId'] = $user['id'];
+        $_SESSION['isLoggedIn'] = true;
+        header("location: http://localhost/Project_be1_php");
+      }
+    
+  }
+  
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -16,12 +37,9 @@
 
     <div x-data="setup()" x-init="$refs.loading.classList.add('hidden'); setColors(color);" :class="{ 'dark': isDark}">
       <!-- Loading screen -->
-      <div
-        x-ref="loading"
-        class="fixed inset-0 z-50 flex items-center justify-center text-2xl font-semibold text-white bg-primary-darker"
-      >
-        Loading.....
-      </div>
+      <?php if(isset($_COOKIE['success'])) :
+        echo $_COOKIE['success'];
+        endif ?>
       <div
         class="flex flex-col items-center justify-center min-h-screen p-4 space-y-4 antialiased text-gray-900 bg-gray-100 dark:bg-dark dark:text-light"
       >
@@ -35,12 +53,12 @@
         <main>
           <div class="w-full max-w-sm px-4 py-6 space-y-6 bg-white rounded-md dark:bg-darker">
             <h1 class="text-xl font-semibold text-center">Login</h1>
-            <form action="/login" method="post" class="space-y-6">
+            <form action="login.php" method="post" class="space-y-6">
 
               <input
                 class="w-full px-4 py-2 border rounded-md dark:bg-darker dark:border-gray-700 focus:outline-none focus:ring focus:ring-primary-100 dark:focus:ring-primary-darker"
-                type="email"
-                name="email"
+                type="text"
+                name="username"
                 placeholder="Email address"
                 required
               />
@@ -88,7 +106,7 @@
             <!-- Social login links -->
             <!-- Brand icons src https://boxicons.com -->
             <a
-              href="/checkout/orderinfo"
+              href="http://localhost/Project_be1_php/checkout/orderinfo"
               class="flex items-center justify-center px-4 py-2 space-x-2 text-white transition-all duration-200 bg-[#006a32] rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 dark:focus:ring-offset-darker"
             >
              
@@ -97,7 +115,7 @@
 
             <!-- Register link -->
             <div class="text-sm text-gray-600 dark:text-gray-400">
-              Don't have an account yet? <a href="/auth/register" class="text-blue-600 hover:underline">Register</a>
+              Don't have an account yet? <a href="register.php" class="text-blue-600 hover:underline">Register</a>
             </div>
           </div>
         </main>
@@ -143,51 +161,7 @@
       </div>
     </div>
 
-    <script>
-      const setup = () => {
-        const getTheme = () => {
-          if (window.localStorage.getItem('dark')) {
-            return JSON.parse(window.localStorage.getItem('dark'))
-          }
-          return !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        }
 
-        const setTheme = (value) => {
-          window.localStorage.setItem('dark', value)
-        }
-
-        const getColor = () => {
-          if (window.localStorage.getItem('color')) {
-            return window.localStorage.getItem('color')
-          }
-          return 'cyan'
-        }
-
-        const setColors = (color) => {
-          const root = document.documentElement
-          root.style.setProperty('--color-primary', `var(--color-${color})`)
-          root.style.setProperty('--color-primary-50', `var(--color-${color}-50)`)
-          root.style.setProperty('--color-primary-100', `var(--color-${color}-100)`)
-          root.style.setProperty('--color-primary-light', `var(--color-${color}-light)`)
-          root.style.setProperty('--color-primary-lighter', `var(--color-${color}-lighter)`)
-          root.style.setProperty('--color-primary-dark', `var(--color-${color}-dark)`)
-          root.style.setProperty('--color-primary-darker', `var(--color-${color}-darker)`)
-          this.selectedColor = color
-          window.localStorage.setItem('color', color)
-        }
-
-        return {
-          loading: true,
-          isDark: getTheme(),
-          color: getColor(),
-          toggleTheme() {
-            this.isDark = !this.isDark
-            setTheme(this.isDark)
-          },
-          setColors,
-        }
-      }
-    </script>
 
   </body>
 </html>

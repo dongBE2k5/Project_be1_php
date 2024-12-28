@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
+<?php include("./layout/header.php") ?>
 <body>
     <section class="text-gray-600 body-font">
         <div class="container px-5 py-24 mx-auto justify-center w-5/6">

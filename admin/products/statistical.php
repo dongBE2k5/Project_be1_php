@@ -1,216 +1,287 @@
+<?php
+session_start();
+require_once '../../config/database.php';
+spl_autoload_register(function ($className) {
+    require_once "../../app/models/$className.php";
+});
+
+$orderModel = new Order();
+
+// Lấy số liệu thống kê
+$totalOrders = $orderModel->getTotalOrders();
+$totalRevenue = $orderModel->getTotalRevenue();
+$topProducts = $orderModel->getTopProducts();
+$topProductsMonth = $orderModel->getTopProductsMonth();
+$monthlyProductStatistics = $orderModel->getMonthlyProductStatistics();
+
+
+$monthlyRevenue = $orderModel->getMonthlyRevenue(); // Thêm dữ liệu doanh thu hàng tháng
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <title>Document</title>
+    <title>Thống Kê Đơn Hàng</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
+<style>
+    /* Thẻ canvas chứa biểu đồ */
+    canvas {
+        display: block;
+        margin: 20px auto; /* Căn giữa */
+        width: 100%; /* Đặt chiều rộng tối đa */
+        max-width: 800px; /* Giới hạn chiều rộng tối đa */
+        height: auto; /* Tự động điều chỉnh chiều cao */
+        border-radius: 12px; /* Bo góc biểu đồ */
+        background: linear-gradient(145deg, #f3f4f6, #ffffff);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 -2px 4px rgba(255, 255, 255, 0.6) inset;
+        padding: 30px;
+    }
+
+
+    /* Card container */
+    .card {
+        background: linear-gradient(135deg, #ffffff, #f9fafb);
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 -5px 8px rgba(255, 255, 255, 0.5) inset;
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2), 0 -8px 12px rgba(255, 255, 255, 0.7) inset;
+    }
+
+    /* Header của card */
+    .card-header {
+        background: linear-gradient(145deg, #007bff, #0056b3);
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        padding: 15px 20px;
+        text-transform: uppercase;
+        border-bottom: 3px solid #0056b3;
+    }
+
+    /* Body của card */
+    .card-body {
+        padding: 30px 15px;
+    }
+
+    /* Hiệu ứng hover vào canvas */
+    canvas:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 -5px 8px rgba(255, 255, 255, 0.6) inset;
+        transition: all 0.3s ease;
+    }
+</style>
+
+
 <body>
+<div class="container mt-5">
+        <h1 class="text-center">Thống Kê Đơn Hàng</h1>
 
-<div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-
-  <div class="flex justify-between items-start w-full">
-      <div class="flex-col items-center">
-        <div class="flex items-center mb-1">
-            <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white me-1">Website traffic</h5>
-            <svg data-popover-target="chart-info" data-popover-placement="bottom" class="w-3.5 h-3.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm0 16a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm1-5.034V12a1 1 0 0 1-2 0v-1.418a1 1 0 0 1 1.038-.999 1.436 1.436 0 0 0 1.488-1.441 1.501 1.501 0 1 0-3-.116.986.986 0 0 1-1.037.961 1 1 0 0 1-.96-1.037A3.5 3.5 0 1 1 11 11.466Z"/>
-            </svg>
-            <div data-popover id="chart-info" role="tooltip" class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
-                <div class="p-3 space-y-2">
-                    <h3 class="font-semibold text-gray-900 dark:text-white">Activity growth - Incremental</h3>
-                    <p>Report helps navigate cumulative growth of community activities. Ideally, the chart should have a growing trend, as stagnating chart signifies a significant decrease of community activity.</p>
-                    <h3 class="font-semibold text-gray-900 dark:text-white">Calculation</h3>
-                    <p>For each date bucket, the all-time volume of activities is calculated. This means that activities in period n contain all activities up to period n, plus the activities generated by your community in period.</p>
-                    <a href="#" class="flex items-center font-medium text-blue-600 dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700 hover:underline">Read more <svg class="w-2 h-2 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-              </svg></a>
-            </div>
-            <div data-popper-arrow></div>
-        </div>
-      </div>
-      <button id="dateRangeButton" data-dropdown-toggle="dateRangeDropdown" data-dropdown-ignore-click-outside-class="datepicker" type="button" class="inline-flex items-center text-blue-700 dark:text-blue-600 font-medium hover:underline">31 Nov - 31 Dev <svg class="w-3 h-3 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-        </svg>
-      </button>
-      <div id="dateRangeDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-80 lg:w-96 dark:bg-gray-700 dark:divide-gray-600">
-          <div class="p-3" aria-labelledby="dateRangeButton">
-            <div date-rangepicker datepicker-autohide class="flex items-center">
-                <div class="relative">
-                  <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                      </svg>
-                  </div>
-                  <input name="start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start date">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-header">Tổng Số Đơn Hàng</div>
+                    <div class="card-body">
+                        <h2><?php echo $totalOrders; ?></h2>
+                    </div>
                 </div>
-                <span class="mx-2 text-gray-500 dark:text-gray-400">to</span>
-                <div class="relative">
-                  <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                      </svg>
-                  </div>
-                  <input name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End date">
-              </div>
             </div>
-          </div>
-      </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-header">Tổng Doanh Thu (VND)</div>
+                    <div class="card-body">
+                        <h2><?php echo number_format($totalRevenue); ?></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-header">Sản Phẩm Bán Chạy</div>
+                    <div class="card-body">
+                        <h4><?php echo $topProducts['name']; ?></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header text-center">Doanh Thu Hàng Tháng</div>
+                    <div class="card-body">
+                        <canvas id="monthlyRevenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">Sản Phẩm Hàng Tháng</div>
+                    <div class="card-body">
+                        <canvas id="productMonthlyRevenueChart" width="900" height="500"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="flex justify-end items-center">
-      <button id="widgetDropdownButton" data-dropdown-toggle="widgetDropdown" data-dropdown-placement="bottom" type="button"  class="inline-flex items-center justify-center text-gray-500 w-8 h-8 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm"><svg class="w-3.5 h-3.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
-          <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
-        </svg><span class="sr-only">Open dropdown</span>
-      </button>
-      <div id="widgetDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="widgetDropdownButton">
-            <li>
-              <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><svg class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.418 17.861 1 20l2.139-6.418m4.279 4.279 10.7-10.7a3.027 3.027 0 0 0-2.14-5.165c-.802 0-1.571.319-2.139.886l-10.7 10.7m4.279 4.279-4.279-4.279m2.139 2.14 7.844-7.844m-1.426-2.853 4.279 4.279"/>
-                </svg>Edit widget
-              </a>
-            </li>
-            <li>
-              <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><svg class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"/>
-                  <path d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>
-                </svg>Download data
-              </a>
-            </li>
-            <li>
-              <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><svg class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5.953 7.467 6.094-2.612m.096 8.114L5.857 9.676m.305-1.192a2.581 2.581 0 1 1-5.162 0 2.581 2.581 0 0 1 5.162 0ZM17 3.84a2.581 2.581 0 1 1-5.162 0 2.581 2.581 0 0 1 5.162 0Zm0 10.322a2.581 2.581 0 1 1-5.162 0 2.581 2.581 0 0 1 5.162 0Z"/>
-                </svg>Add to repository
-              </a>
-            </li>
-            <li>
-              <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><svg class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                  <path d="M17 4h-4V2a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2H1a1 1 0 0 0 0 2h1v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1a1 1 0 1 0 0-2ZM7 2h4v2H7V2Zm1 14a1 1 0 1 1-2 0V8a1 1 0 0 1 2 0v8Zm4 0a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0v8Z"/>
-                </svg>Delete widget
-              </a>
-            </li>
-          </ul>
-    </div>
-  </div>
-  </div>
 
-  <!-- Line Chart -->
-  <div class="py-6" id="pie-chart"></div>
+    <script>
+        const ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
+        const monthlyRevenueData = <?php echo json_encode($monthlyRevenue); ?>;
+        const labels = monthlyRevenueData.map(item => item.month);
+        const data = monthlyRevenueData.map(item => item.monthlyRevenue);
 
-  <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-    <div class="flex justify-between items-center pt-5">
-      <!-- Button -->
-      <button
-        id="dropdownDefaultButton"
-        data-dropdown-toggle="lastDaysdropdown"
-        data-dropdown-placement="bottom"
-        class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
-        type="button">
-        Last 7 days
-        <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-        </svg>
-      </button>
-      <div id="lastDaysdropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 7 days</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 30 days</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 90 days</a>
-            </li>
-          </ul>
-      </div>
-      <a
-        href="#"
-        class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-        Traffic analysis
-        <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-        </svg>
-      </a>
-    </div>
-  </div>
-</div>
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Doanh Thu (VND)',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
 
 
-</body>
-<script>
-const getChartOptions = () => {
-  return {
-    series: [52.8, 26.8, 20.4],
-    colors: ["#1C64F2", "#16BDCA", "#9061F9"],
-    chart: {
-      height: 420,
-      width: "100%",
-      type: "pie",
+        const ctx2 = document.getElementById('productMonthlyRevenueChart').getContext('2d');
+const productMonthlyRevenueData = <?php echo json_encode($monthlyProductStatistics); ?>;
+
+// Dữ liệu
+const labels2 = productMonthlyRevenueData.map(item => item.name);
+const data2 = productMonthlyRevenueData.map(item => item.total);
+
+new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: labels2, // Tên sản phẩm
+        datasets: [{
+            label: 'Số Sản Phẩm',
+            data: data2, // Tổng số lượng sản phẩm
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)'
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 2
+        }]
     },
-    stroke: {
-      colors: ["white"],
-      lineCap: "",
-    },
-    plotOptions: {
-      pie: {
-        labels: {
-          show: true,
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Số Lượng'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Sản Phẩm'
+                }
+            }
         },
-        size: "100%",
-        dataLabels: {
-          offset: -25
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return `Số lượng: ${tooltipItem.raw}`;
+                    }
+                }
+            },
+            legend: {
+                display: false // Không cần hiển thị legend trong Bar Chart
+            }
         }
-      },
-    },
-    labels: ["Direct", "Organic search", "Referrals"],
-    dataLabels: {
-      enabled: true,
-      style: {
-        fontFamily: "Inter, sans-serif",
-      },
-    },
-    legend: {
-      position: "bottom",
-      fontFamily: "Inter, sans-serif",
-    },
-    yaxis: {
-      labels: {
-        formatter: function (value) {
-          return value + "%"
-        },
-      },
-    },
-    xaxis: {
-      labels: {
-        formatter: function (value) {
-          return value  + "%"
-        },
-      },
-      axisTicks: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-    },
-  }
-}
+    }
+});
 
-if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
-  const chart = new ApexCharts(document.getElementById("pie-chart"), getChartOptions());
-  chart.render();
-}
 
-</script>
-<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+
+
+//        const ctxs = document.getElementById('productMonthlyRevenueChart').getContext('2d');
+
+// // Dữ liệu từ PHP
+// const monthlyProductStatistics =<?php echo json_encode($monthlyProductStatistics); ?>;;
+
+// // Xử lý dữ liệu: Nhóm sản phẩm theo tháng
+// const months = Array.from({ length: 12 }, (_, i) => `Tháng ${i + 1}`);
+// const datasetMap = {};
+
+// monthlyProductStatistics.forEach(item => {
+//     const monthIndex = item.month - 1; // Convert SQL month (1-12) to array index (0-11)
+//     if (!datasetMap[item.name]) {
+//         datasetMap[item.name] = Array(12).fill(0);
+//     }
+//     datasetMap[item.name][monthIndex] = item.total;
+// });
+
+// const datasets = Object.entries(datasetMap).map(([name, data]) => ({
+//     label: name,
+//     data,
+//     backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.2)`,
+//     borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
+//     borderWidth: 1
+// }));
+
+// // Tạo biểu đồ
+// new Chart(ctxs, {
+//     type: 'bar',
+//     data: {
+//         labels: months,
+//         datasets: datasets
+//     },
+//     options: {
+//         responsive: true,
+//         scales: {
+//             x: { stacked: true },
+//             y: { beginAtZero: true, stacked: true }
+//         }
+//     }
+// });
+
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>

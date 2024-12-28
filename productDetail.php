@@ -7,7 +7,7 @@ spl_autoload_register(function ($className) {
 $id = $_GET['id'];
 
 $productModel = new Product();
-$products = $productModel->find($id);
+$product = $productModel->find($id);
 
 $categoriesModel = new Category();
 $categories = $categoriesModel->all();
@@ -29,7 +29,7 @@ $categories = $categoriesModel->all();
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 
     <style>
-        <?php include 'public/css/style.css'; ?>
+        <?php include 'public/css/style.css' ?>
     </style>
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -43,205 +43,19 @@ $categories = $categoriesModel->all();
 <style>
 
 </style>
-<header class="text-gray-600 body-font w-screen">
-
-    <div class="container mx-auto flex flex-wrap p-3 flex-col md:flex-row items-center">
-        <a href="home.php" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <img class="w-18 h-18" src="http://thepizzacompany.vn/images/thumbs/000/0003940_logo%20den.png" alt="">
-            <!-- <span class="ml-3 text-lg font-mono">Pizza Store</span> -->
-        </a>
-        <form action="/searchProduct" method="get">
-            <div class="flex justify-center items-center md:w-[400px] w-[90%]  md:pl-8">
-                <div class="space-y-10  ">
-                    <div class="flex items-center p-1 space-x-6 h-[40px] bg-white rounded-xl shadow-lg ">
-                        <div class="flex bg-gray-100 flex items-center px-2 h-[35px] md:w-72 w-52 space-x-4 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-30" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                            <input class="bg-gray-100 outline-none placeholder:text-sm" type="text" name="name"
-                                placeholder="Article name or keyword..." />
-                        </div>
-                        <div
-                            class="bg-red-600 py-1.5 px-5 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
-                            <input class="text-sm" type="submit" value="Search">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-
-        <nav class="md:ml-auto flex pt-4 flex-wrap items-center text-base justify-center">
-            <div class="right-wrap">
-                <div class="account flex items-center">
-                    <div href="/info" class="icon pr-2"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-                            height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                            <path fill-rule="evenodd"
-                                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                        </svg></div>
-                    <div class="login-and-register">
-                        <a href="login.php" class="register">Đăng nhập</a>
-                        <span>/</span>
-                        <a href="register.php" class="login">Tạo tài khoản</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <nav
-        class="md:w-11/12 overflow-x-auto w-full mx-auto py-2 mb-3 bg-[#00603c] md:rounded-xl md:ml-auto flex items-center text-white flex-row flex md:text-base text-sm ">
-        <?php
-        foreach ($categories as $category) :
-        ?>
-            <a class="mr-5 ml-5 hover:text-gray-900" href="product.php?id=<?php echo $category['id'] ?>"><?php echo $category['name'] ?></a>
-        <?php
-        endforeach;
-        ?>
-
-        <div class="icon_cart ml-auto mr-20 group">
-            <div class="w-28 h-6 bg-white rounded-lg flex items-center justify-between">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="blue" class="bi bi-cart3 ml-2"
-                    viewBox="0 0 16 16">
-                    <path
-                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                </svg>
-                <div class="w-6 h-6 rounded-full bg-red-500 flex justify-center items-center mr-1 ">
-                    <span class="minicart--item-count">0</span>
-                </div>
-            </div>
-            <!-- Trong blade template -->
-            <div
-                class="text-black minicart bg-white p-4 w-72 mx-auto mt-1 rounded-lg shadow-lg z-50 absolute right-[5%]  hidden group-hover:block">
-                <div class="minicart--item-container text-xs text-center font-semibold mb-2 ">
-                    <p class="text-xl font-bold">Mini Cart</p>
-                </div>
-                <hr class="mb-4">
-                <div class="list_item">
-                    <ul class="minicart">
-
-
-
-
-                    </ul>
-                    <div>
-                        <hr class="my-4">
-                        <div class="minicart--subtotal">
-                            <p class="minicart--subtotal-title float-left">Subtotal</p>
-                            <p class="minicart--subtotal-amount float-right font-bold text-lg">$270.00 USD</p>
-                        </div>
-                        <a href="/cart"><input type="button" value="View Cart Details"
-                                class="w-full h-10 font-semibold bg-black text-white border-none cursor-pointer hover:bg-gray-800">
-                    </div></a>
-
-
-                </div>
-
-            </div>
-
-
-
-        </div>
-
-        </div>
-
-
-
-        </div>
-    </nav>
-
-
-
-</header>
+<?php include("./layout/header.php") ?>
 
 <body>
     <!-- Slide -->
     <!-- navbar -->
+
     <div class="container">
 
     </div>
     <section class="text-gray-600 body-font">
         <div class="container pb-24 mx-auto">
 
-            <dialog id="firstModal" class="p-10 border-2 border-gray-300 rounded-xl w-11/12 h-4/5 mx-auto relative">
-                <div
-                    class="close absolute top-0 right-0 w-7 h-7 rounded-full flex justify-center align-center bg-red-500">
-                    <button onclick="firstModal.close()"> X</button>
-                </div>
-                <div class="grid grid-cols-2 gap-6">
 
-                    <div class=" w-full h-full rounded-md">
-
-                        <img id="modal-product-Image" class="w-10/12" src="" alt="">
-                        <input type="hidden" value="190" id="modal-product-image-hidden">
-                        <div>
-                            <!-- <p class="text-2xl font-bold pr-20 text-center" id="total-price">190.000đ</p> -->
-                            <p class="text-2xl font-bold pr-20 text-center pt-20 " id="modal-product-price">1900</p>
-                            <input type="hidden" value="190" id="modal-product-price-hidden">
-                            <!-- <input id="price_hidden" type="hidden" value="1900" > -->
-                        </div>
-                        <p id="price" class="text-xl font-bold pr-20 text-center"> </p>
-                    </div>
-
-                    <div class="flex flex-col gap-4">
-                        <p id="modal-product-name" class="text-xl font-bold pr-20 ">Tên Sản Phẩm</p>
-                        <p class="hidden" id="modal-product-id"></p>
-                        <input type="hidden" value="Tên Sản Phẩm" id="modal-product-name-hidden">
-                        <input type="hidden" value="Tên Sản Phẩm" id="modal-product-id-hidden">
-                        <p class="text-[#007d43]">Kích thước nhỏ 6``</p>
-                        <p class="leading-relaxed text-base mb-3">Tôm, Đào hoà quyện bùng nổ cùng sốt Thousand Island
-                        </p>
-                        <h1 class="title-font text-lg font-bold text-[#007d43] mb-3">Kích Thước </h1>
-                        <div class="size">
-                            <label class="pr-3">
-                                <input type="radio" class="size" name="size" value="small" data-price="0"> Size nhỏ
-                                (+$0)
-                            </label>
-                            <label class="pr-3">
-                                <input type="radio" class="size" name="size" value="medium" data-price="100000"> Size
-                                trung bình (+$2)
-                            </label>
-                            <label class="pr-3">
-                                <input type="radio" class="size" name="size" value="large" data-price="200000"> Size lớn
-                                (+$4)
-                            </label>
-                        </div>
-                        <h1 class="title-font text-lg font-bold text-[#007d43] mb-3">Đế</h1>
-                        <div class="toppng">
-                            <label class="pr-2">
-                                <input type="checkbox" class="topping mr-2" value="Dày" data-topping="100">Dày
-                            </label>
-                            <label class="pr-2">
-                                <input type="checkbox" class="topping" value="Mỏng Giòn" data-topping="105"> Mỏng giòn
-                            </label>
-                            <label class="pr-2">
-                                <input type="checkbox" class="topping" value="Viền Phô Mai" data-topping="110"> Viền phô
-                                mai
-                            </label>
-                            <label class="pr-2">
-                                <input type="checkbox" class="topping" value="Viền Phô Mai Xúc Xích" data-topping="115">
-                                Viền phô mai xúc xích
-                            </label>
-                        </div>
-
-                        <div class="comment">
-                            <h1 class="title-font text-lg font-bold text-[#007d43] mb-3">Ghi Chú</h1>
-                            <textarea class="border-2 border-gray-200" name="ghichu" id="" cols="55" rows="5">
-                  </textarea>
-                        </div>
-
-                        <!-- <button onclick="addItemToCart('Pizza Hải Sản', 190.000)"  class="bg-[#007d43] hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 w-full border border-gray-400 rounded-xl shadow"> -->
-
-                        <button onclick="addToMiniCart()"
-                            class="text-center text-white add-to-cart-btn bg-[#007d43] font-semibold py-2 px-4 w-full border border-gray-400 rounded-xl shadow">
-                            THÊM VÀO GIỎ HÀNG</button>
-                    </div>
-                    <div>
-                    </div>
-            </dialog>
 
 
             <!-- show product -->
@@ -250,50 +64,85 @@ $categories = $categoriesModel->all();
                     <div class="col-6">
                         <div class="product__photo">
 
-                            <img src="<?php echo $products['image'] ?>" alt="green apple slice">
-
+                            <img id="" src="<?php echo $product['image'] ?>" alt="green apple slice">
+                            <input type="hidden" name="image" value="<?php echo $product['image'] ?>" id="productImage">
+                            <input type="hidden" name="id" value="<?php echo $product['id'] ?>" id="productID">
                         </div>
                     </div>
                     <div class="col-6">
-                        <form action="cart.php" method="post">
-                        <input type="text" name="<?php echo $products['id'] ?>" id="note" class="hidden">
+                        <form method="post">
+                            <input type="text" name="<?php echo $product['id'] ?>" id="note" class="hidden">
                             <div class="product__info">
                                 <div class="title">
-                                    <h1><?php echo $products['name'] ?></h1>
-                                    <h4>Thông tin sản phẩm</h4>
+                                    <h1 class="text-3xl py-2 font-bold text-black" id="productName"><?php echo $product['name'] ?></h1>
+                                    <h4 class="py-2">Thông tin sản phẩm</h4>
                                     <h4>
-                                        ....
+                                        <?php echo $product['description'] ?>
                                     </h4>
                                 </div>
-                                <div class="price">
-                                    <span><?php
-                                            $formattedNum = number_format($products['price']);
-                                            echo $formattedNum; ?>đ</span>
+                                <div class="price text-xl font-bold text-black py-2">
+                                Giá: <span class="productPrice "><?= $product['price'] ?> </span>VND
+
                                 </div>
-                                
-                                <div class="description">
-                                
-                                    <label for="note"> Ghi chú</label>
-                                    <input type="text" name="note" id="note">
+                                <div class="flex items-center">
+                                    <label class="text-md pr-4 text-black font-bold py-2" for="">Số lượng</label>
+                                    <div class="quantity my-2">
+                                        <button type="button" class="minus" aria-label="Decrease">&minus;</button>
+                                        <input type="number" class="input-box" value="1" min="1" max="10">
+                                        <button type="button" class="plus" aria-label="Increase">&plus;</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h1 class="title-font text-lg font-bold text-black mb-3">Kích Thước </h1>
+                                        <div class="size text-black">
+                                            <label class="pr-3">
+                                                <input type="radio" class="size" name="size" value="small" data-price="0"> Size nhỏ
+                                                (+$0)
+                                            </label>
+                                            <label class="pr-3">
+                                                <input type="radio" class="size" name="size" value="medium" data-price="100000"> Size
+                                                trung bình (+$2)
+                                            </label>
+                                            <label class="pr-3">
+                                                <input type="radio" class="size" name="size" value="large" data-price="200000"> Size lớn
+                                                (+$4)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h1 class="title-font text-lg font-bold text-black mb-3">Đế</h1>
+                                        <div class="toppng">
+                                            <label class="pr-2">
+                                                <input type="checkbox" class="topping mr-2" value="Dày" data-topping="100">Dày
+                                            </label>
+                                            <label class="pr-2">
+                                                <input type="checkbox" class="topping" value="Mỏng Giòn" data-topping="105"> Mỏng giòn
+                                            </label>
+                                            <label class="pr-2">
+                                                <input type="checkbox" class="topping" value="Viền Phô Mai" data-topping="110"> Viền phô
+                                                mai
+                                            </label>
+                                            <label class="pr-2">
+                                                <input type="checkbox" class="topping" value="Viền Phô Mai Xúc Xích" data-topping="115">
+                                                Viền phô mai xúc xích
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="quantity">
-                                    <button type="button" class="minus" aria-label="Decrease">&minus;</button>
-                                    <input type="number" class="input-box" value="1" min="1" max="10">
-                                    <button type="button" class="plus" aria-label="Increase">&plus;</button>
+                                <div class="comment">
+                                    <h1 class="title-font text-lg font-bold text-[#007d43] mb-3">Ghi Chú</h1>
+                                    <textarea class="border-2 border-gray-200" name="ghichu" id="" cols="55" rows="5"></textarea>
                                 </div>
-
-
-                                <button type="submit" class="btn btn-outline-success">Add to Cart</button>
-
-
+                                <button onclick="addToMiniCart()" type="button" class="addtoCart text-white mt-3 w-full py-2 btn border rounded-md bg-green-800 btn-outline-success">Add to Cart</button>
 
                             </div>
                         </form>
                     </div>
                 </div>
 
-              
+
 
             </section>
 
@@ -448,23 +297,29 @@ $categories = $categoriesModel->all();
 </footer>
 
 <script>
-    (function() {
+
+    // document.addEventListener("DOMContentLoaded", function () {
         const quantityContainer = document.querySelector(".quantity");
         const minusBtn = quantityContainer.querySelector(".minus");
         const plusBtn = quantityContainer.querySelector(".plus");
         const inputBox = quantityContainer.querySelector(".input-box");
-
+        alert
         updateButtonStates();
 
+        // Thêm sự kiện click cho container
         quantityContainer.addEventListener("click", handleButtonClick);
+
+        // Thêm sự kiện khi người dùng nhập trực tiếp số
         inputBox.addEventListener("input", handleQuantityChange);
 
+        // Hàm cập nhật trạng thái các nút
         function updateButtonStates() {
             const value = parseInt(inputBox.value);
             minusBtn.disabled = value <= 1;
             plusBtn.disabled = value >= parseInt(inputBox.max);
         }
 
+        // Xử lý sự kiện click vào nút tăng/giảm
         function handleButtonClick(event) {
             if (event.target.classList.contains("minus")) {
                 decreaseValue();
@@ -473,33 +328,115 @@ $categories = $categoriesModel->all();
             }
         }
 
+        // Giảm giá trị
         function decreaseValue() {
-            let value = parseInt(inputBox.value);
-            value = isNaN(value) ? 1 : Math.max(value - 1, 1);
+            let value = parseInt(inputBox.value) || 1;
+            value = Math.max(value - 1, 1);
             inputBox.value = value;
             updateButtonStates();
             handleQuantityChange();
         }
 
+        // Tăng giá trị
         function increaseValue() {
-            let value = parseInt(inputBox.value);
-            value = isNaN(value) ? 1 : Math.min(value + 1, parseInt(inputBox.max));
+            let value = parseInt(inputBox.value) || 1;
+            value = Math.min(value + 1, parseInt(inputBox.max));
             inputBox.value = value;
             updateButtonStates();
             handleQuantityChange();
         }
 
+        // Xử lý khi thay đổi số lượng
         function handleQuantityChange() {
-            let value = parseInt(inputBox.value);
-            value = isNaN(value) ? 1 : value;
+            let value = parseInt(inputBox.value) || 1;
 
-            // Execute your code here based on the updated quantity value
+            // Đảm bảo giá trị nằm trong giới hạn
+            if (value < parseInt(inputBox.min)) value = parseInt(inputBox.min);
+            if (value > parseInt(inputBox.max)) value = parseInt(inputBox.max);
+
+            inputBox.value = value;
+
+            // Gọi hành động tùy chỉnh khi giá trị thay đổi
             console.log("Quantity changed:", value);
         }
-    })();
+    // });
+
+
+    const toppingCheckboxes = document.querySelectorAll('.topping');
+    const sizeRadios = document.querySelectorAll('.size');
+    const totalPriceElement = document.getElementById('modal-product-price');
+   
+
+
+
+
+
+    function addToMiniCart() {
+        // Lấy thông tin sản phẩm từ các phần tử HTML
+        const productName = document.getElementById('productName').textContent;
+        const productImage = document.getElementById('productImage').value;
+        const productPrice = document.querySelector(".productPrice").textContent; // Lấy tổng giá
+        const productId = document.getElementById('productID').value;
+        const quantity = inputBox.value
+        const size = document.querySelector('input[name="size"]:checked').value;
+        const crust = getSelectedToppings();
+        const notes = document.querySelector('textarea[name="ghichu"]').value;
+
+        // Tạo đối tượng sản phẩm
+        const product = {
+            id: productId,
+            name: productName,
+            image: productImage,
+            price: productPrice, // Sử dụng giá tính toán từ các lựa chọn
+            size: size,
+            crust: crust,
+            notes: notes,
+            quantity: quantity,
+            userID: userId
+        };
+
+
+        // Thêm sản phẩm vào giỏ hàng (sử dụng local storage hoặc nơi bạn lưu trữ giỏ hàng)
+        const miniCart = JSON.parse(localStorage.getItem(`miniCartss_${userId}`)) || [];
+
+        // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+        const existingProductIndex = miniCart.findIndex(item => (item.id === productId) && (item.size == product.size) && JSON.stringify(item.crust) === JSON.stringify(product.crust));
+
+        if (existingProductIndex !== -1) {
+            // Nếu sản phẩm đã tồn tại, tăng quantity lên
+            miniCart[existingProductIndex].quantity =
+                Number(miniCart[existingProductIndex].quantity) + Number(quantity);
+        } else {
+            // Nếu sản phẩm chưa tồn tại, thêm vào giỏ hàng
+            miniCart.push(product);
+        }
+
+
+        localStorage.setItem(`miniCartss_${userId}`, JSON.stringify(miniCart));
+
+        // Cập nhật số lượng sản phẩm trong mini cart
+        const itemCount = document.querySelector('.minicart--item-count');
+        itemCount.textContent = miniCart.length;
+        updateMiniCart();
+        // Đóng modal sau khi thêm sản phẩm thành công
+    }
+
+    function getSelectedToppings() {
+        const selectedToppings = [];
+        toppingCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                selectedToppings.push(checkbox.value);
+            }
+        });
+        return selectedToppings;
+    }
+
+    
+
+
 </script>
-<script src="public/js/app.js"></script>
-<script src="/build/js/slide.js"></script>
+<!-- <script src="public/js/app.js"></script>
+<script src="/build/js/slide.js"></script> -->
 
 
 
