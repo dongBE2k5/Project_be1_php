@@ -41,7 +41,7 @@ $products = $productModel->all();
             Manage Products <a href="add.php" class="btn btn-outline-primary">Add</a>
             <a href="bin.php" class="btn btn-outline-primary">BIN</a>
             <a href="addVoucher.php" class="btn btn-outline-primary">Add Voucher</a>
-            <a href="manageOrders.php" class="btn btn-outline-primary">Manage mangerOrder</a>
+            <a href="manageOrders.php" class="btn btn-outline-primary">Manage Order</a>
             <a href="statistical.php" class="btn btn-outline-primary">Statistical</a>
         </h1>
         <table class="table">

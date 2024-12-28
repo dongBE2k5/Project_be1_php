@@ -16,7 +16,7 @@ class Product extends  Database
        return parent::select($sql)[0];
     }
     function findProductById($id) {
-        $sql=parent::$connection->prepare("SELECT * FROM `products` LEFT JOIN `categories` ON `products`.`category_id`=`categories`.`id` WHERE `products`.`category_id`=?");
+        $sql=parent::$connection->prepare("SELECT `products`.* FROM `products` JOIN `categories` ON `products`.`category_id`=`categories`.`id` WHERE `products`.`category_id`=?");
         $sql->bind_param("i",$id);
        return parent::select($sql);
     }
