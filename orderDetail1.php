@@ -204,6 +204,7 @@ if (isset($_SESSION['userId'])) {
                     <div class="w-2/10 pl-4">
                         <form class="m-0" action="detailOrder.php" method="POST">
                             <input type="hidden" name="orderId" value="<?php echo $order['id'] ?>">
+                            <?php if($order['status'] == 1) : ?>
                             <button type="submit" class="bg-red-600 text-white rounded-lg">
                                 <div class="flex p-2">
                                     <div class="p-1">
@@ -214,6 +215,7 @@ if (isset($_SESSION['userId'])) {
                                     Hủy đơn hàng
                                 </div>
                             </button>
+                            <?php endif; ?>
                         </form>
                     </div>
                 </div>

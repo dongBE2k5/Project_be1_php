@@ -17,7 +17,7 @@
     <section class="text-gray-600 body-font">
         <div class="container px-5  py-24 mx-auto flex flex-wrap">
             <div class="lg:w-1/2 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
-                <img alt="feature" class="object-cover object-center h-50 w-50" src="/image/odersess.png">
+                <img alt="feature" class="object-cover object-center h-50 w-50" src="https://cdni.iconscout.com/illustration/premium/thumb/order-confirmation-illustration-download-in-svg-png-gif-file-formats--verification-done-delivery-shopping-confirmed-lifestyle-pack-people-illustrations-4500195.png">
             </div>
             <div class="flex flex-col flex-wrap lg:py-5 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center">
                 <div class="bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 mb-5">
@@ -36,8 +36,7 @@
                 </div>
                 <h2 class="text-green-900 font-bold text-xl title-font font-medium">Cảm ơn bạn đã đặt hàng tại Pizza Store Việt Nam</h2>
                 <div class="mt-3 font-bold ">
-                    <p>Mã đơn hàng bạn đã đặt là: </p>
-                    <p>Để kiểm tra tình trạng đơn hàng vui lòng click vào đây: <a href="detailOrder.php" class="text-blue-400 hover:underline dark:text-blue-500">THEO DÕI ĐƠN HÀNG</a></p>
+                    <p>Để kiểm tra đơn hàng vừa đặt vui lòng click vào đây: <a href="detailOrder.php" class="text-blue-400 hover:underline dark:text-blue-500">XEM ĐƠN HÀNG</a></p>
                     <p>Mọi thắc mắc và yêu cầu hỗ trợ vui lòng liên hệ tổng đài CSKH: 1900758689</p>
                     <p>Chúc bạn ngon miệng !!!</p>
                 </div>
