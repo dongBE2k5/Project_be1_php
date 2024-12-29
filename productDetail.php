@@ -71,7 +71,7 @@ $categories = $categoriesModel->all();
                     </div>
                     <div class="col-6">
                         <form method="post">
-                            <input type="text" name="<?php echo $product['id'] ?>" id="note" class="hidden">
+                            <input type="text" name="productId" value="<?php echo $product['id'] ?>" id="note" class="hidden">
                             <div class="product__info">
                                 <div class="title">
                                     <h1 class="text-3xl py-2 font-bold text-black" id="productName"><?php echo $product['name'] ?></h1>
@@ -81,7 +81,7 @@ $categories = $categoriesModel->all();
                                     </h4>
                                 </div>
                                 <div class="price text-xl font-bold text-black py-2">
-                                Giá: <span class="productPrice "><?= $product['price'] ?> </span>VND
+                                    Giá: <span class="productPrice "><?= $product['price'] ?> </span>VND
 
                                 </div>
                                 <div class="flex items-center">
@@ -93,45 +93,45 @@ $categories = $categoriesModel->all();
                                     </div>
                                 </div>
                                 <div class="flex justify-between">
-                                    <?php if($product['category_id'] != 3) :?>
+                                    <?php if ($product['category_id'] != 3) : ?>
                                         <div>
-                                        <h1 class="title-font text-lg font-bold text-black mb-3">Size </h1>
-                                        <div class="size text-black">
-                                            <label class="pr-3">
-                                                <input type="radio" class="size" name="size" value="small" data-price="0"> Size nhỏ
-                                                (+$0)
-                                            </label>
-                                            <label class="pr-3">
-                                                <input type="radio" class="size" name="size" value="medium" data-price="100000"> Size
-                                                trung bình (+$2)
-                                            </label>
-                                            <label class="pr-3">
-                                                <input type="radio" class="size" name="size" value="large" data-price="200000"> Size lớn
-                                                (+$4)
-                                            </label>
+                                            <h1 class="title-font text-lg font-bold text-black mb-3">Size </h1>
+                                            <div class="size text-black">
+                                                <label class="pr-3">
+                                                    <input type="radio" class="size" name="size" value="small" data-price="0"> Size nhỏ
+                                                    (+$0)
+                                                </label>
+                                                <label class="pr-3">
+                                                    <input type="radio" class="size" name="size" value="medium" data-price="100000"> Size
+                                                    trung bình (+$2)
+                                                </label>
+                                                <label class="pr-3">
+                                                    <input type="radio" class="size" name="size" value="large" data-price="200000"> Size lớn
+                                                    (+$4)
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <?php  endif ?>
-                                    <?php if($product['category_id'] == 1) :?>
-                                    <div>
-                                        <h1 class="title-font text-lg font-bold text-black mb-3">Đế</h1>
-                                        <div class="toppng">
-                                            <label class="pr-2">
-                                                <input type="checkbox" class="topping mr-2" value="Dày" data-topping="100">Dày
-                                            </label>
-                                            <label class="pr-2">
-                                                <input type="checkbox" class="topping" value="Mỏng Giòn" data-topping="105"> Mỏng giòn
-                                            </label>
-                                            <label class="pr-2">
-                                                <input type="checkbox" class="topping" value="Viền Phô Mai" data-topping="110"> Viền phô
-                                                mai
-                                            </label>
-                                            <label class="pr-2">
-                                                <input type="checkbox" class="topping" value="Viền Phô Mai Xúc Xích" data-topping="115">
-                                                Viền phô mai xúc xích
-                                            </label>
+                                    <?php endif ?>
+                                    <?php if ($product['category_id'] == 1) : ?>
+                                        <div>
+                                            <h1 class="title-font text-lg font-bold text-black mb-3">Đế</h1>
+                                            <div class="toppng">
+                                                <label class="pr-2">
+                                                    <input type="checkbox" class="topping mr-2" value="Dày" data-topping="100">Dày
+                                                </label>
+                                                <label class="pr-2">
+                                                    <input type="checkbox" class="topping" value="Mỏng Giòn" data-topping="105"> Mỏng giòn
+                                                </label>
+                                                <label class="pr-2">
+                                                    <input type="checkbox" class="topping" value="Viền Phô Mai" data-topping="110"> Viền phô
+                                                    mai
+                                                </label>
+                                                <label class="pr-2">
+                                                    <input type="checkbox" class="topping" value="Viền Phô Mai Xúc Xích" data-topping="115">
+                                                    Viền phô mai xúc xích
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
                                     <?php endif ?>
                                 </div>
 
@@ -258,79 +258,78 @@ $categories = $categoriesModel->all();
             </div>
         </div>
     </div>
-   
+
 </footer>
 
 <script>
-
     // document.addEventListener("DOMContentLoaded", function () {
-        const quantityContainer = document.querySelector(".quantity");
-        const minusBtn = quantityContainer.querySelector(".minus");
-        const plusBtn = quantityContainer.querySelector(".plus");
-        const inputBox = quantityContainer.querySelector(".input-box");
-        alert
+    const quantityContainer = document.querySelector(".quantity");
+    const minusBtn = quantityContainer.querySelector(".minus");
+    const plusBtn = quantityContainer.querySelector(".plus");
+    const inputBox = quantityContainer.querySelector(".input-box");
+    alert
+    updateButtonStates();
+
+    // Thêm sự kiện click cho container
+    quantityContainer.addEventListener("click", handleButtonClick);
+
+    // Thêm sự kiện khi người dùng nhập trực tiếp số
+    inputBox.addEventListener("input", handleQuantityChange);
+
+    // Hàm cập nhật trạng thái các nút
+    function updateButtonStates() {
+        const value = parseInt(inputBox.value);
+        minusBtn.disabled = value <= 1;
+        plusBtn.disabled = value >= parseInt(inputBox.max);
+    }
+
+    // Xử lý sự kiện click vào nút tăng/giảm
+    function handleButtonClick(event) {
+        if (event.target.classList.contains("minus")) {
+            decreaseValue();
+        } else if (event.target.classList.contains("plus")) {
+            increaseValue();
+        }
+    }
+
+    // Giảm giá trị
+    function decreaseValue() {
+        let value = parseInt(inputBox.value) || 1;
+        value = Math.max(value - 1, 1);
+        inputBox.value = value;
         updateButtonStates();
+        handleQuantityChange();
+    }
 
-        // Thêm sự kiện click cho container
-        quantityContainer.addEventListener("click", handleButtonClick);
+    // Tăng giá trị
+    function increaseValue() {
+        let value = parseInt(inputBox.value) || 1;
+        value = Math.min(value + 1, parseInt(inputBox.max));
+        inputBox.value = value;
+        updateButtonStates();
+        handleQuantityChange();
+    }
 
-        // Thêm sự kiện khi người dùng nhập trực tiếp số
-        inputBox.addEventListener("input", handleQuantityChange);
+    // Xử lý khi thay đổi số lượng
+    function handleQuantityChange() {
+        let value = parseInt(inputBox.value) || 1;
 
-        // Hàm cập nhật trạng thái các nút
-        function updateButtonStates() {
-            const value = parseInt(inputBox.value);
-            minusBtn.disabled = value <= 1;
-            plusBtn.disabled = value >= parseInt(inputBox.max);
-        }
+        // Đảm bảo giá trị nằm trong giới hạn
+        if (value < parseInt(inputBox.min)) value = parseInt(inputBox.min);
+        if (value > parseInt(inputBox.max)) value = parseInt(inputBox.max);
 
-        // Xử lý sự kiện click vào nút tăng/giảm
-        function handleButtonClick(event) {
-            if (event.target.classList.contains("minus")) {
-                decreaseValue();
-            } else if (event.target.classList.contains("plus")) {
-                increaseValue();
-            }
-        }
+        inputBox.value = value;
 
-        // Giảm giá trị
-        function decreaseValue() {
-            let value = parseInt(inputBox.value) || 1;
-            value = Math.max(value - 1, 1);
-            inputBox.value = value;
-            updateButtonStates();
-            handleQuantityChange();
-        }
-
-        // Tăng giá trị
-        function increaseValue() {
-            let value = parseInt(inputBox.value) || 1;
-            value = Math.min(value + 1, parseInt(inputBox.max));
-            inputBox.value = value;
-            updateButtonStates();
-            handleQuantityChange();
-        }
-
-        // Xử lý khi thay đổi số lượng
-        function handleQuantityChange() {
-            let value = parseInt(inputBox.value) || 1;
-
-            // Đảm bảo giá trị nằm trong giới hạn
-            if (value < parseInt(inputBox.min)) value = parseInt(inputBox.min);
-            if (value > parseInt(inputBox.max)) value = parseInt(inputBox.max);
-
-            inputBox.value = value;
-
-            // Gọi hành động tùy chỉnh khi giá trị thay đổi
-            console.log("Quantity changed:", value);
-        }
+        // Gọi hành động tùy chỉnh khi giá trị thay đổi
+        console.log("Quantity changed:", value);
+    }
     // });
 
 
     const toppingCheckboxes = document.querySelectorAll('.topping');
     const sizeRadios = document.querySelectorAll('.size');
     const totalPriceElement = document.getElementById('modal-product-price');
-   
+
 
 
 
@@ -343,7 +342,8 @@ $categories = $categoriesModel->all();
         const productPrice = document.querySelector(".productPrice").textContent; // Lấy tổng giá
         const productId = document.getElementById('productID').value;
         const quantity = inputBox.value
-        const size = document.querySelector('input[name="size"]:checked').value;
+        const selectedInput = document.querySelector('input[name="size"]:checked');
+        const size = selectedInput ? selectedInput.value : "";
         const crust = getSelectedToppings();
         const notes = document.querySelector('textarea[name="ghichu"]').value;
 
@@ -395,10 +395,6 @@ $categories = $categoriesModel->all();
         });
         return selectedToppings;
     }
-
-    
-
-
 </script>
 <!-- <script src="public/js/app.js"></script>
 <script src="/build/js/slide.js"></script> -->
