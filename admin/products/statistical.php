@@ -12,10 +12,19 @@ $totalOrders = $orderModel->getTotalOrders();
 $totalRevenue = $orderModel->getTotalRevenue();
 $topProducts = $orderModel->getTopProducts();
 $topProductsMonth = $orderModel->getTopProductsMonth();
-$monthlyProductStatistics = $orderModel->getMonthlyProductStatistics();
 
+
+$totalProducts = $orderModel->getTotalProducts();
 
 $monthlyRevenue = $orderModel->getMonthlyRevenue(); // Thêm dữ liệu doanh thu hàng tháng
+
+if (isset($_POST['filter'])) {
+    $monthlyProductStatistics = $orderModel->getMonthlyYearProductStatistics($_POST['month'],$_POST['year']);
+}else{
+    $monthlyProductStatistics = $orderModel->getMonthlyProductStatistics();
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -87,6 +96,7 @@ $monthlyRevenue = $orderModel->getMonthlyRevenue(); // Thêm dữ liệu doanh t
 
 <body>
 <div class="container mt-5">
+
         <h1 class="text-center">Thống Kê Đơn Hàng</h1>
 
         <div class="row mt-4">
@@ -115,6 +125,17 @@ $monthlyRevenue = $orderModel->getMonthlyRevenue(); // Thêm dữ liệu doanh t
                 </div>
             </div>
         </div>
+        <div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-header bg-primary text-white">
+            <h2>Tổng Sản Phẩm</h2>
+        </div>
+        <div class="card-body">
+            <h1 class="display-4"><?php echo number_format($totalProducts); ?></h1>
+            <p class="card-text">Tổng số lượng sản phẩm đã bán từ tất cả các đơn hàng.</p>
+        </div>
+    </div>
+</div>
 
         <div class="row mt-5">
             <div class="col-md-12">
@@ -126,13 +147,49 @@ $monthlyRevenue = $orderModel->getMonthlyRevenue(); // Thêm dữ liệu doanh t
                 </div>
             </div>
         </div>
+<br>
 
-
-        
+<form action="statistical.php" method="post">
+<label class="mt-4 block"> <input type="radio"
+					name="filterOption" value="month" id="yearRadio"> Lọc theo
+					tháng năm
+				</label>
+				<select name="month" id="monthYearPicker"
+					class="block mt-2 hidden">
+					<option value="" disabled selected>Chọn tháng</option>
+					<!-- Không thể chọn và không gửi -->
+					<option value="1">Tháng 1</option>
+					<option value="2">Tháng 2</option>
+					<option value="3">Tháng 3</option>
+					<option value="4">Tháng 4</option>
+					<option value="5">Tháng 5</option>
+					<option value="6">Tháng 6</option>
+					<option value="7">Tháng 7</option>
+					<option value="8">Tháng 8</option>
+					<option value="9">Tháng 9</option>
+					<option value="10">Tháng 10</option>
+					<option value="11">Tháng 11</option>
+					<option value="12">Tháng 12</option>
+				</select>
+				<select name="year" id="yearPicker" class="block mt-2 hidden">
+				<option value="" disabled selected>Chọn năm</option>
+					<option value="2024">Năm 2024</option>
+					<option value="2023">Năm 2023</option>
+					<option value="2022">Năm 2022</option>
+					<option value="2021">Năm 2021</option>
+					<option value="2020">Năm 2020</option>
+					<option value="2019">Năm 2019</option>
+					<option value="2018">Năm 2018</option>
+				</select>
+                <br>
+                <button type="submit" name="filter"
+					class="mt-4 px-6 py-2 bg-blue-500  rounded-lg hover:bg-blue-600 btn btn-outline-info">
+					Lọc</button>
+                </form>
         <div class="row mt-5">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header text-center">Sản Phẩm Hàng Tháng</div>
+                    <div class="card-header text-center">Tổng Sản Phẩm Hàng Tháng</div>
                     <div class="card-body">
                         <canvas id="productMonthlyRevenueChart" width="900" height="500"></canvas>
                     </div>
@@ -140,7 +197,8 @@ $monthlyRevenue = $orderModel->getMonthlyRevenue(); // Thêm dữ liệu doanh t
             </div>
         </div>
     </div>
-
+    <br>
+    <a href="index.php" class="d-flex justify-content-around link-offset-2 link-underline link-underline-opacity-0" ><button class="btn btn-outline-success">Back home</button></a>
     <script>
         const ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
         const monthlyRevenueData = <?php echo json_encode($monthlyRevenue); ?>;

@@ -8,6 +8,13 @@ class Order extends Database
 
         return parent::select($sql);
     }
+    function findByIDs($id)
+    {
+        $sql = parent::$connection->prepare('SELECT * FROM `orders` WHERE `id` = ? ');
+        $sql->bind_param("i", $id);
+        return parent::select($sql);
+    }
+   
     function updateStatus($status, $id)
     {
         $sql = parent::$connection->prepare("UPDATE `orders` SET `status`=? WHERE `id`=?");
@@ -26,6 +33,16 @@ class Order extends Database
     }
 
 
+
+    function getTotalProducts()
+    {
+        $sql = parent::$connection->prepare("
+        SELECT SUM(orderdetail.quantity) AS totalProducts 
+        FROM orderdetail
+    ");
+        // $sql->execute();
+        return parent::select($sql)[0]['totalProducts'];
+    }
     function getTotalOrders()
     {
         $sql = parent::$connection->prepare("SELECT COUNT(`id`) AS 'total' FROM `orders`");
@@ -116,6 +133,32 @@ LIMIT 1;
         return parent::select($sql);
     }
 
+  public function getMonthlyYearProductStatistics($month, $year){
+    $sql = parent::$connection->prepare("
+        SELECT 
+            SUM(orderdetail.quantity) AS total,
+            products.name AS name
+        FROM 
+            orderdetail
+        JOIN 
+            products 
+        ON 
+            orderdetail.productId = products.id
+        JOIN 
+            orders
+        ON 
+            orderdetail.orderId = orders.id
+        WHERE 
+            MONTH(orders.created_at) = ? 
+            AND YEAR(orders.created_at) = ?
+        GROUP BY 
+            products.id
+        ORDER BY 
+            total DESC
+    ");
+    $sql->bind_param("ii", $month, $year);
+    return parent::select($sql);
+}
 
 
 

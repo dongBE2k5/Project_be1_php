@@ -1,5 +1,5 @@
 <?php
-class Voucher extends  Database
+class Voucher extends Database
 {
     function all() {
         $sql=parent::$connection->prepare('SELECT * FROM `categories`');

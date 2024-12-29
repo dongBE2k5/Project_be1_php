@@ -93,8 +93,9 @@ $categories = $categoriesModel->all();
                                     </div>
                                 </div>
                                 <div class="flex justify-between">
-                                    <div>
-                                        <h1 class="title-font text-lg font-bold text-black mb-3">Kích Thước </h1>
+                                    <?php if($product['category_id'] != 3) :?>
+                                        <div>
+                                        <h1 class="title-font text-lg font-bold text-black mb-3">Size </h1>
                                         <div class="size text-black">
                                             <label class="pr-3">
                                                 <input type="radio" class="size" name="size" value="small" data-price="0"> Size nhỏ
@@ -110,6 +111,8 @@ $categories = $categoriesModel->all();
                                             </label>
                                         </div>
                                     </div>
+                                    <?php  endif ?>
+                                    <?php if($product['category_id'] == 1) :?>
                                     <div>
                                         <h1 class="title-font text-lg font-bold text-black mb-3">Đế</h1>
                                         <div class="toppng">
@@ -129,6 +132,7 @@ $categories = $categoriesModel->all();
                                             </label>
                                         </div>
                                     </div>
+                                    <?php endif ?>
                                 </div>
 
                                 <div class="comment">

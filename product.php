@@ -11,7 +11,6 @@ $categoriesModel= new Category();
 $categories= $categoriesModel->all();
 $category= $categoriesModel->findByID($id);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 

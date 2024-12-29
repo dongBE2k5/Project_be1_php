@@ -14,7 +14,7 @@ $priceVoucher = 0;
 $currentDate = date('Y-m-d');
 if(!empty($_POST['voucher'])) {
     $voucher = $voucherModel->findByName($_POST['voucher']);
-    if($voucher[0]['expire'] > $currentDate) {
+    if($voucher[0]['end_date'] >= $currentDate && $voucher[0]['start_date'] <= $currentDate ) {
     $totalOrder = (int)$_POST['totalOrderVoucher'] * ((100 - $voucher[0]['percent']) / 100);
     $priceVoucher = (int)$_POST['totalOrderVoucher'] - $totalOrder;
     }else {

@@ -15,12 +15,9 @@ $categoriesModel= new Category();
 $categories= $categoriesModel->all();
 $pagecurrent = 0;
 if(isset($_GET['page'])){
-
     $pagecurrent =  ($_GET['page'] - 1) * 3;
 
 }
-
-
 
 
 $productModel = new Product();

@@ -9,12 +9,6 @@ $categories = $categoryModel->all();
 
 $voucherModel= new Voucher();
 
-var_dump($_POST['name']);
-var_dump($_POST['start_date']);
-var_dump($_POST['end_date']);
-var_dump($_POST['percent']);
-var_dump($_POST['category-id']);
-
 if (isset($_POST['name']) && isset($_POST['start_date']) && isset($_POST['end_date']) && isset($_POST['percent']) ) {
 
     $name=$_POST['name'];
