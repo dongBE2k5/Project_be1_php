@@ -65,11 +65,11 @@ if (isset($_SESSION['userId'])) {
                                 ?>
                             </td>
                             <td class="py-4 px-6 flex">
-                                <a href="orderDetail1.php?id=<?php echo $order['id']; ?>"
+                                <a href="/orderDetail1.php?id=<?php echo $order['id']; ?>"
                                     class=" border rounded-md px-2 py-1 bg-green-800 text-white hover:underline">Xem chi tiết</a>
                                 <form class="m-0 w-fit" action="orderHistory.php" method="POST">
                                     <input type="hidden" name="orderId" value="<?php echo $order['id'] ?>">
-                                    <button name="restore" <?php echo (($order['status'] != 0) ? "disabled" : "" ) ?>
+                                    <button name="restore" <?php echo (($order['status'] != 0 && $order['status'] != 3 ) ? "disabled" : "" ) ?>
                                         class="rounded-md px-2 text-white bg-green-800 border py-1 ml-2 hover:underline">
                                         Đặt lại
                                     </button>
