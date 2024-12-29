@@ -13,12 +13,17 @@ if (isset($_POST['status']) && $_POST['orderId']) {
 }
 $orders;
 if (isset($_GET['search'])) {
-    $q=$_GET['search'];
+    $q = $_GET['search'];
     $orders = $orderModel->findByIDs($q);
-    var_dump($orders);
-}else{
+
+} elseif(isset($_POST['filter'])){
+
+}
+else {
     $orders = $orderModel->all();
 }
+
+
 // var_dump($_POST['changeStatus']);
 
 ?>
@@ -114,18 +119,34 @@ if (isset($_GET['search'])) {
         <div class="box">
             <form name="search">
                 <div class="row">
-             
+
                     <div class="search-container mt-5 col-3">
-                      
+
                         <input type="text" name="search" placeholder="Search order id" class="search-input">
-                      <a class="search-btn" name="search">
-                        <i class="fas fa-search"></i>
-</a>
-                       
+                        <a class="search-btn" name="search">
+                            <i class="fas fa-search"></i>
+                        </a>
+
                     </div>
                 </div>
             </form>
-
+            <a href="index.php" class="d-flex justify-content-around link-offset-2 link-underline link-underline-opacity-0"><button class="btn btn-outline-success">Back home</button></a>
+            <form action="manageOrders.php">
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <select class="form-select form-select-sm change-status " name="filterStatus">
+                            <option value="">Trạng thái</option>
+                            <option value="3">Đã Giao</option>
+                            <option value="2">Đang Vận Chuyển</option>
+                            <option value="1">Đang Xử Lý</option>
+                            <option value="0">Đã Hủy</option>
+                        </select>
+                        <button type="submit" name="filter"
+                            class="mt-4 px-6 py-2 bg-blue-500  rounded-lg hover:bg-blue-600 btn btn-outline-info">
+                            Lọc</button>
+                    </div>
+                </div>
+            </form>
 
         </div>
         <table class="table table-striped table-bordered mt-4">
@@ -193,11 +214,11 @@ if (isset($_GET['search'])) {
                         </td>
                     </tr>
                 <?php endforeach; ?>
-                
+
 
                 <form action="manageOrders.php" method="post" id="form"></form>
             </tbody>
-            <a href="index.php" class="d-flex justify-content-around link-offset-2 link-underline link-underline-opacity-0" ><button class="btn btn-outline-success">Back home</button></a>
+
 
             <script>
                 const form = document.getElementById("form");

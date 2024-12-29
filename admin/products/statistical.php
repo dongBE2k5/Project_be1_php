@@ -96,6 +96,7 @@ if (isset($_POST['filter'])) {
 
 <body>
 <div class="container mt-5">
+
         <h1 class="text-center">Thống Kê Đơn Hàng</h1>
 
         <div class="row mt-4">
@@ -196,7 +197,8 @@ if (isset($_POST['filter'])) {
             </div>
         </div>
     </div>
-
+    <br>
+    <a href="index.php" class="d-flex justify-content-around link-offset-2 link-underline link-underline-opacity-0" ><button class="btn btn-outline-success">Back home</button></a>
     <script>
         const ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
         const monthlyRevenueData = <?php echo json_encode($monthlyRevenue); ?>;

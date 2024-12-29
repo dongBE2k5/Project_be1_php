@@ -137,7 +137,7 @@ LIMIT 1;
     $sql = parent::$connection->prepare("
         SELECT 
             SUM(orderdetail.quantity) AS total,
-            products.name AS productName
+            products.name AS name
         FROM 
             orderdetail
         JOIN 
