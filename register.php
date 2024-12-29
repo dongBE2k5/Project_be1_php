@@ -14,7 +14,7 @@
       echo "hello";
       if($userModel->register($_POST['username'], $_POST['password'], $_POST['email'])) {
         setcookie("success", "Đăng kí tài khoản thành công", time() + 3500);
-        header("location: http://localhost/Project_be1_phpgit/login.php");
+        header("location: http://localhost/Project_be1_php/login.php");
       }
     }
   }

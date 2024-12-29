@@ -1,3 +1,102 @@
+.gradient-custom {
+  background: linear-gradient(135deg, #ffffff 0%, #e6ffe6 100%);
+  color: #333;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.list-unstyled {
+  margin: 0;
+  padding: 0;
+}
+
+.list-unstyled .d-flex {
+  align-items: flex-start;
+}
+
+.list-unstyled .rounded-circle {
+  border: 2px solid #4caf50;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card.mask-custom {
+  background-color: rgba(76, 175, 80, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: rgba(76, 175, 80, 0.2);
+  padding: 15px;
+  border-bottom: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.card-header p {
+  margin: 0;
+  color: #4caf50;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.card-body p {
+  margin: 0;
+  color: #333;
+}
+
+textarea.form-control {
+  background-color: #f9f9f9;
+  color: #333;
+  border: 1px solid #4caf50;
+  border-radius: 10px;
+  resize: none;
+  transition: border-color 0.3s ease;
+}
+
+textarea.form-control:focus {
+  background-color: #ffffff;
+  color: #000;
+  border-color: #66bb6a;
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.btn {
+  background-color: #4caf50;
+  color: #fff;
+  border-radius: 30px;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #388e3c;
+  color: #fff;
+}
+
+.shadow-1-strong {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.float-end {
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card.mask-custom {
+    margin: 0 auto;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 
 
 .quantity {

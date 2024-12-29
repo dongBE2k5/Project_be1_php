@@ -21,7 +21,7 @@ $userModel = new User();
     <?php endif ?>
 
     <div class="container mx-auto flex flex-wrap p-3 flex-col md:flex-row items-center">
-        <a href="home.php" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <a href="index.php" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
             <img class="w-18 h-18" src="http://thepizzacompany.vn/images/thumbs/000/0003940_logo%20den.png" alt="">
             <!-- <span class="ml-3 text-lg font-mono">Pizza Store</span> -->
         </a>

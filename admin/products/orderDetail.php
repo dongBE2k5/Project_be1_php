@@ -86,6 +86,7 @@ if (isset($_GET['order_id'])) {
                     <th>Tên Sản Phẩm</th>
                     <th>Giá (VND)</th>
                     <th>Số Lượng </th>
+                    <th>Mô tả </th>
                 </tr>
             </thead>
             <tbody>
@@ -97,6 +98,7 @@ if (isset($_GET['order_id'])) {
                             <td><?php echo ($detail['productName']); ?></td>
                             <td><?php echo number_format($detail['price']); ?></td>
                             <td><?php echo ($detail['quantity']); ?></td>
+                            <td><?php echo ($detail['attribute']); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>

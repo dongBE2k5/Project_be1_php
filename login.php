@@ -11,6 +11,7 @@
       if($user) {
         $_SESSION['username'] = $user['username'];
         $_SESSION['userId'] = $user['id'];
+        $_SESSION['role_id']= $user['role_id'];
         $_SESSION['isLoggedIn'] = true;
         header("location: http://localhost/Project_be1_php");
       }

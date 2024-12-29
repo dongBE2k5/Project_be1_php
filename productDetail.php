@@ -11,7 +11,27 @@ $product = $productModel->find($id);
 
 $categoriesModel = new Category();
 $categories = $categoriesModel->all();
+
+$commentModel= new Comment();
+$comments=$commentModel->all();
+
+$iduser=0;
+if (isset($_SESSION['id'])) {
+  $iduser=$_SESSION['id'];
+}
+
 // $category = $categoriesModel->findByID($id);
+if(isset($_POST['comment']) ){
+    if (!empty($_SESSION['userId'])) {
+        if ($commentModel->add($_POST['content'],$_SESSION['userId'],$id)){
+            header("Location: http://localhost/Project_be1_php/productDetail.php?id=$id");
+              }
+    } else{
+        $_SESSION['notification'] = 'You are not logged in yet';
+      }
+  
+  }
+ 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,6 +69,15 @@ $categories = $categoriesModel->all();
     <!-- Slide -->
     <!-- navbar -->
 
+    <?php
+            if (!empty($_SESSION['notification'])) :
+        ?>
+        <div class="alert alert-danger" role="alert">
+        <?php echo $_SESSION['notification']; $_SESSION = ''; ?>
+        </div>
+        <?php
+        endif;
+        ?>
     <div class="container">
 
     </div>
@@ -153,7 +182,72 @@ $categories = $categoriesModel->all();
 
         </div>
     </section>
+    <section class="gradient-custom">
+    <div class="row">
+      <div class="">
+       
+        <ul class="list-unstyled text-white">
+        <?php
+        foreach ($comments as $comment) :
+            if ($comment['product_id']==$id) :    
+            if ($comment['user_id']==$iduser): 
+        ?>
+          <li class="d-flex justify-content-between mb-4">
+            <img src="https://citibella.net/wp-content/uploads/2024/09/anh-avatar-vo-tri-6.jpg" alt="avatar"
+              class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+            <div class="card mask-custom">
+              <div class="card-header d-flex justify-content-between p-3"
+                style="border-bottom: 1px solid rgba(255,255,255,.3);">
+                <p class="fw-bold mb-0"><?php echo $comment['username']?></p>
+                <p class="text-light small mb-0"><i class="far fa-clock"></i> </p>
+              </div>
+              <div class="card-body">
+                <p class="mb-0">
+                <?php echo $comment['content']?>
+                </p>
+              </div>
+            </div>
+          </li>
+          <?php
+          else :
+          ?>
+          <li class="d-flex justify-content-between mb-4">
+            <div class="card mask-custom w-100">
+              <div class="card-header d-flex justify-content-between p-3"
+                style="border-bottom: 1px solid rgba(255,255,255,.3);">
+                <p class="fw-bold mb-0"><?php echo $comment['username']?></p>
+                <p class="text-light small mb-0"><i class="far fa-clock"></i> </p>
+              </div>
+              <div class="card-body">
+                <p class="mb-0">
+                <?php echo $comment['content']?>
+                </p>
+              </div>
+            </div>
+            <img src="https://citibella.net/wp-content/uploads/2024/09/anh-avatar-vo-tri-6.jpg" alt="avatar"
+              class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+          </li>
+         <?php
+         endif;
+        endif;
+         endforeach;
+         ?>
+          <form action="productDetail.php?id=<?php echo $product['id'] ?>" method="post">
+              <li class="mb-2 p-5">
+                <div data-mdb-input-init class="form-outline form-white">
+                  <textarea class="form-control" id="content" name="content" rows="4"></textarea>
+                  <label class="form-label" for="content">Message</label>
+                </div>
+              </li>
+              <button  type="submit" name="comment" data-mdb-button-init data-mdb-ripple-init class="btn btn-light btn-lg btn-rounded float-end">Send</button>
 
+          </form>
+        </ul>
+
+      </div>
+
+    </div>
+</section>
 
 </body>
 <!-- footer -->
