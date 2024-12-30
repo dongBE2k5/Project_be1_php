@@ -100,7 +100,7 @@ if(isset($_POST['comment']) ){
                     </div>
                     <div class="col-6">
                         <form method="post">
-                            <input type="text" name="<?php echo $product['id'] ?>" id="note" class="hidden">
+                            <input type="text" name="productId" value="<?php echo $product['id'] ?>" id="note" class="hidden">
                             <div class="product__info">
                                 <div class="title">
                                     <h1 class="text-3xl py-2 font-bold text-black" id="productName"><?php echo $product['name'] ?></h1>
@@ -110,7 +110,7 @@ if(isset($_POST['comment']) ){
                                     </h4>
                                 </div>
                                 <div class="price text-xl font-bold text-black py-2">
-                                Giá: <span class="productPrice "><?= $product['price'] ?> </span>VND
+                                    Giá: <span class="productPrice "><?= $product['price'] ?> </span>VND
 
                                 </div>
                                 <div class="flex items-center">
@@ -122,45 +122,45 @@ if(isset($_POST['comment']) ){
                                     </div>
                                 </div>
                                 <div class="flex justify-between">
-                                    <?php if($product['category_id'] != 3) :?>
+                                    <?php if ($product['category_id'] != 3) : ?>
                                         <div>
-                                        <h1 class="title-font text-lg font-bold text-black mb-3">Size </h1>
-                                        <div class="size text-black">
-                                            <label class="pr-3">
-                                                <input type="radio" class="size" name="size" value="small" data-price="0"> Size nhỏ
-                                                (+$0)
-                                            </label>
-                                            <label class="pr-3">
-                                                <input type="radio" class="size" name="size" value="medium" data-price="100000"> Size
-                                                trung bình (+$2)
-                                            </label>
-                                            <label class="pr-3">
-                                                <input type="radio" class="size" name="size" value="large" data-price="200000"> Size lớn
-                                                (+$4)
-                                            </label>
+                                            <h1 class="title-font text-lg font-bold text-black mb-3">Size </h1>
+                                            <div class="size text-black">
+                                                <label class="pr-3">
+                                                    <input type="radio" class="size" name="size" value="small" data-price="0"> Size nhỏ
+                                                    (+$0)
+                                                </label>
+                                                <label class="pr-3">
+                                                    <input type="radio" class="size" name="size" value="medium" data-price="100000"> Size
+                                                    trung bình (+$2)
+                                                </label>
+                                                <label class="pr-3">
+                                                    <input type="radio" class="size" name="size" value="large" data-price="200000"> Size lớn
+                                                    (+$4)
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <?php  endif ?>
-                                    <?php if($product['category_id'] == 1) :?>
-                                    <div>
-                                        <h1 class="title-font text-lg font-bold text-black mb-3">Đế</h1>
-                                        <div class="toppng">
-                                            <label class="pr-2">
-                                                <input type="checkbox" class="topping mr-2" value="Dày" data-topping="100">Dày
-                                            </label>
-                                            <label class="pr-2">
-                                                <input type="checkbox" class="topping" value="Mỏng Giòn" data-topping="105"> Mỏng giòn
-                                            </label>
-                                            <label class="pr-2">
-                                                <input type="checkbox" class="topping" value="Viền Phô Mai" data-topping="110"> Viền phô
-                                                mai
-                                            </label>
-                                            <label class="pr-2">
-                                                <input type="checkbox" class="topping" value="Viền Phô Mai Xúc Xích" data-topping="115">
-                                                Viền phô mai xúc xích
-                                            </label>
+                                    <?php endif ?>
+                                    <?php if ($product['category_id'] == 1) : ?>
+                                        <div>
+                                            <h1 class="title-font text-lg font-bold text-black mb-3">Đế</h1>
+                                            <div class="toppng">
+                                                <label class="pr-2">
+                                                    <input type="checkbox" class="topping mr-2" value="Dày" data-topping="100">Dày
+                                                </label>
+                                                <label class="pr-2">
+                                                    <input type="checkbox" class="topping" value="Mỏng Giòn" data-topping="105"> Mỏng giòn
+                                                </label>
+                                                <label class="pr-2">
+                                                    <input type="checkbox" class="topping" value="Viền Phô Mai" data-topping="110"> Viền phô
+                                                    mai
+                                                </label>
+                                                <label class="pr-2">
+                                                    <input type="checkbox" class="topping" value="Viền Phô Mai Xúc Xích" data-topping="115">
+                                                    Viền phô mai xúc xích
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
                                     <?php endif ?>
                                 </div>
 
@@ -352,118 +352,78 @@ if(isset($_POST['comment']) ){
             </div>
         </div>
     </div>
-    <div class="bg-gray-400">
-        <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
-            <p class="text-gray-500 text-sm text-center sm:text-left">© 2023 Le Phu Vinh —
-                <a href="https://twitter.com/knyttneve" rel="noopener noreferrer" class="text-gray-600 ml-1"
-                    target="_blank">@gmail.com</a>
-            </p>
-            <span class="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
-                <a class="text-gray-500">
-                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        class="w-5 h-5" viewBox="0 0 24 24">
-                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
-                    </svg>
-                </a>
-                <a class="ml-3 text-gray-500">
-                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        class="w-5 h-5" viewBox="0 0 24 24">
-                        <path
-                            d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
-                        </path>
-                    </svg>
-                </a>
-                <a class="ml-3 text-gray-500">
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
-                        <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
-                    </svg>
-                </a>
-                <a class="ml-3 text-gray-500">
-                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
-                        <path stroke="none"
-                            d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z">
-                        </path>
-                        <circle cx="4" cy="4" r="2" stroke="none"></circle>
-                    </svg>
-                </a>
-            </span>
-        </div>
-    </div>
+
 </footer>
 
 <script>
-
     // document.addEventListener("DOMContentLoaded", function () {
-        const quantityContainer = document.querySelector(".quantity");
-        const minusBtn = quantityContainer.querySelector(".minus");
-        const plusBtn = quantityContainer.querySelector(".plus");
-        const inputBox = quantityContainer.querySelector(".input-box");
-        alert
+    const quantityContainer = document.querySelector(".quantity");
+    const minusBtn = quantityContainer.querySelector(".minus");
+    const plusBtn = quantityContainer.querySelector(".plus");
+    const inputBox = quantityContainer.querySelector(".input-box");
+    alert
+    updateButtonStates();
+
+    // Thêm sự kiện click cho container
+    quantityContainer.addEventListener("click", handleButtonClick);
+
+    // Thêm sự kiện khi người dùng nhập trực tiếp số
+    inputBox.addEventListener("input", handleQuantityChange);
+
+    // Hàm cập nhật trạng thái các nút
+    function updateButtonStates() {
+        const value = parseInt(inputBox.value);
+        minusBtn.disabled = value <= 1;
+        plusBtn.disabled = value >= parseInt(inputBox.max);
+    }
+
+    // Xử lý sự kiện click vào nút tăng/giảm
+    function handleButtonClick(event) {
+        if (event.target.classList.contains("minus")) {
+            decreaseValue();
+        } else if (event.target.classList.contains("plus")) {
+            increaseValue();
+        }
+    }
+
+    // Giảm giá trị
+    function decreaseValue() {
+        let value = parseInt(inputBox.value) || 1;
+        value = Math.max(value - 1, 1);
+        inputBox.value = value;
         updateButtonStates();
+        handleQuantityChange();
+    }
 
-        // Thêm sự kiện click cho container
-        quantityContainer.addEventListener("click", handleButtonClick);
+    // Tăng giá trị
+    function increaseValue() {
+        let value = parseInt(inputBox.value) || 1;
+        value = Math.min(value + 1, parseInt(inputBox.max));
+        inputBox.value = value;
+        updateButtonStates();
+        handleQuantityChange();
+    }
 
-        // Thêm sự kiện khi người dùng nhập trực tiếp số
-        inputBox.addEventListener("input", handleQuantityChange);
+    // Xử lý khi thay đổi số lượng
+    function handleQuantityChange() {
+        let value = parseInt(inputBox.value) || 1;
 
-        // Hàm cập nhật trạng thái các nút
-        function updateButtonStates() {
-            const value = parseInt(inputBox.value);
-            minusBtn.disabled = value <= 1;
-            plusBtn.disabled = value >= parseInt(inputBox.max);
-        }
+        // Đảm bảo giá trị nằm trong giới hạn
+        if (value < parseInt(inputBox.min)) value = parseInt(inputBox.min);
+        if (value > parseInt(inputBox.max)) value = parseInt(inputBox.max);
 
-        // Xử lý sự kiện click vào nút tăng/giảm
-        function handleButtonClick(event) {
-            if (event.target.classList.contains("minus")) {
-                decreaseValue();
-            } else if (event.target.classList.contains("plus")) {
-                increaseValue();
-            }
-        }
+        inputBox.value = value;
 
-        // Giảm giá trị
-        function decreaseValue() {
-            let value = parseInt(inputBox.value) || 1;
-            value = Math.max(value - 1, 1);
-            inputBox.value = value;
-            updateButtonStates();
-            handleQuantityChange();
-        }
-
-        // Tăng giá trị
-        function increaseValue() {
-            let value = parseInt(inputBox.value) || 1;
-            value = Math.min(value + 1, parseInt(inputBox.max));
-            inputBox.value = value;
-            updateButtonStates();
-            handleQuantityChange();
-        }
-
-        // Xử lý khi thay đổi số lượng
-        function handleQuantityChange() {
-            let value = parseInt(inputBox.value) || 1;
-
-            // Đảm bảo giá trị nằm trong giới hạn
-            if (value < parseInt(inputBox.min)) value = parseInt(inputBox.min);
-            if (value > parseInt(inputBox.max)) value = parseInt(inputBox.max);
-
-            inputBox.value = value;
-
-            // Gọi hành động tùy chỉnh khi giá trị thay đổi
-            console.log("Quantity changed:", value);
-        }
+        // Gọi hành động tùy chỉnh khi giá trị thay đổi
+        console.log("Quantity changed:", value);
+    }
     // });
 
 
     const toppingCheckboxes = document.querySelectorAll('.topping');
     const sizeRadios = document.querySelectorAll('.size');
     const totalPriceElement = document.getElementById('modal-product-price');
-   
+
 
 
 
@@ -476,7 +436,8 @@ if(isset($_POST['comment']) ){
         const productPrice = document.querySelector(".productPrice").textContent; // Lấy tổng giá
         const productId = document.getElementById('productID').value;
         const quantity = inputBox.value
-        const size = document.querySelector('input[name="size"]:checked').value;
+        const selectedInput = document.querySelector('input[name="size"]:checked');
+        const size = selectedInput ? selectedInput.value : "";
         const crust = getSelectedToppings();
         const notes = document.querySelector('textarea[name="ghichu"]').value;
 
@@ -528,10 +489,6 @@ if(isset($_POST['comment']) ){
         });
         return selectedToppings;
     }
-
-    
-
-
 </script>
 <!-- <script src="public/js/app.js"></script>
 <script src="/build/js/slide.js"></script> -->

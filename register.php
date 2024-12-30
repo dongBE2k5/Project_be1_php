@@ -116,7 +116,7 @@
 
             <!-- Login link -->
             <div class="text-sm text-gray-600 dark:text-gray-400">
-              Already have an account? <a href="login.html" class="text-blue-600 hover:underline">Login</a>
+              Already have an account? <a href="login.php" class="text-blue-600 hover:underline">Login</a>
             </div>
           </div>
         </main>

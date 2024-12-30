@@ -13,7 +13,8 @@
         $user = new User();
 
         if($user->updatePassword($username, $new_password)){
-            $_SESSION['thongbao'] = 'Đổi mật khẩu thành công';
+            setcookie("success", "Đổi mật khẩu thành công", time() + 3500);
+            header("location: http://localhost/Project_be1_php/login.php");
         }else{
             $_SESSION['thongbao'] = 'Đổi mật khẩu thất bại';
         }

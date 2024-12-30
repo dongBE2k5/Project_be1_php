@@ -100,19 +100,19 @@
             <!-- Or -->
             <div class="flex items-center justify-center space-x-2 flex-nowrap">
               <span class="w-20 h-px bg-gray-300"></span>
-              <span>OR</span>
+              <!-- <span>OR</span> -->
               <span class="w-20 h-px bg-gray-300"></span>
             </div>
 
             <!-- Social login links -->
             <!-- Brand icons src https://boxicons.com -->
-            <a
+            <!-- <a
               href="http://localhost/Project_be1_php/checkout/orderinfo"
               class="flex items-center justify-center px-4 py-2 space-x-2 text-white transition-all duration-200 bg-[#006a32] rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 dark:focus:ring-offset-darker"
             >
              
               <span> Mua Hàng Không Cần Đăng Nhập </span>
-            </a>
+            </a> -->
 
             <!-- Register link -->
             <div class="text-sm text-gray-600 dark:text-gray-400">
