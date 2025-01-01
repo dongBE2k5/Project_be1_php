@@ -14,7 +14,7 @@
       echo "hello";
       if($userModel->register($_POST['username'], $_POST['password'], $_POST['email'])) {
         setcookie("success", "Đăng kí tài khoản thành công", time() + 3500);
-        header("location: http://localhost/Project_be1_phpgit/login.php");
+        header("location: http://localhost/Project_be1_php/login.php");
       }
     }
   }
@@ -116,7 +116,7 @@
 
             <!-- Login link -->
             <div class="text-sm text-gray-600 dark:text-gray-400">
-              Already have an account? <a href="login.html" class="text-blue-600 hover:underline">Login</a>
+              Already have an account? <a href="login.php" class="text-blue-600 hover:underline">Login</a>
             </div>
           </div>
         </main>

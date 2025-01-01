@@ -1,8 +1,8 @@
 <?php
 session_start();
-// if(!isset($_SESSION['isLoggedIn']) || $_SESSION['isLoggedIn'] === false || $_SESSION['role_id'] != 2) {
-//     header('Location: http://localhost/be1_mysql');
-// }
+if(!isset($_SESSION['isLoggedIn']) || $_SESSION['isLoggedIn'] === false || $_SESSION['role_id'] != 2) {
+    header('Location: http://localhost/Project_be1_php');
+}
 
 require_once '../../config/database.php';
 spl_autoload_register(function ($className) {

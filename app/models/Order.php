@@ -14,6 +14,12 @@ class Order extends Database
         $sql->bind_param("i", $id);
         return parent::select($sql);
     }
+    function findByStatus($status)
+    {
+        $sql = parent::$connection->prepare('SELECT * FROM `orders` WHERE `status` = ? ');
+        $sql->bind_param("i", $status);
+        return parent::select($sql);
+    }
    
     function updateStatus($status, $id)
     {

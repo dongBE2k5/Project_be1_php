@@ -173,7 +173,8 @@ if (isset($_SESSION['userId'])) {
                                             d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
                                     </svg>
                                 </div>
-                                Quay lại
+                                <a href="http://localhost/Project_be1_php/orderHistory.php">Quay lại</a>
+                               
                             </div>
                         </button>
                     </div>
@@ -186,8 +187,9 @@ if (isset($_SESSION['userId'])) {
                                         <path fill-rule="evenodd"
                                             d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
                                     </svg>
-                                </div>
+                                </div><a href="http://localhost/Project_be1_php">
                                 Tiếp tục đặt hàng
+                                </a>
                             </div>
                         </button>
                     </div>

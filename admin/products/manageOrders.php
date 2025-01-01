@@ -16,8 +16,8 @@ if (isset($_GET['search'])) {
     $q = $_GET['search'];
     $orders = $orderModel->findByIDs($q);
 
-} elseif(isset($_POST['filter'])){
-
+} elseif(isset($_POST['filterStatus'])){
+    $orders = $orderModel->findByStatus($_POST['filterStatus']);
 }
 else {
     $orders = $orderModel->all();
@@ -131,7 +131,7 @@ else {
                 </div>
             </form>
             <a href="index.php" class="d-flex justify-content-around link-offset-2 link-underline link-underline-opacity-0"><button class="btn btn-outline-success">Back home</button></a>
-            <form action="manageOrders.php">
+            <form action="manageOrders.php" method="post">
                 <div class="row mt-3">
                     <div class="col-md-3">
                         <select class="form-select form-select-sm change-status " name="filterStatus">
@@ -141,7 +141,7 @@ else {
                             <option value="1">Đang Xử Lý</option>
                             <option value="0">Đã Hủy</option>
                         </select>
-                        <button type="submit" name="filter"
+                        <button type="submit"
                             class="mt-4 px-6 py-2 bg-blue-500  rounded-lg hover:bg-blue-600 btn btn-outline-info">
                             Lọc</button>
                     </div>
@@ -207,7 +207,7 @@ else {
                             ?>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-primary btn-sm save-status btnSubmit" <?php echo ($order['status'] == 0) ? "disabled" : "" ?> name="save" form="form">Lưu Trạng Thái</button>
+                            <button type="button" class="btn btn-primary btn-sm save-status btnSubmit" <?php echo ($order['status'] == 0||$order['status'] == 3) ? "disabled" : "" ?> name="save" form="form">Lưu Trạng Thái</button>
                         </td>
                         <td>
                             <a href="orderDetail.php?order_id=<?php echo $order['id']; ?>" class="btn btn-info btn-sm">Chi Tiết</a>
